@@ -5,7 +5,6 @@ import "./index.css";
 import { registerSW } from "virtual:pwa-register";
 import App from "./App";
 
-// eslint-disable-next-line no-unused-vars
 const updateSW = registerSW({
   onNeedRefresh() {},
   onOfflineReady() {},
@@ -17,3 +16,6 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+// eslint-disable-next-line import/prefer-default-export
+export { updateSW };
