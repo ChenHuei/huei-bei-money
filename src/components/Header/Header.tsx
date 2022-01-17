@@ -9,6 +9,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
 import { formatCurrency } from "@/utils/currency";
+import Circle from "./Circle";
 
 interface HeaderProps {
   current: Date;
@@ -19,19 +20,14 @@ function Header(props: HeaderProps) {
   const { current, onChange } = props;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [innerCurrent, setInnerCurrent] = useState<Date | null>(current);
+  const [date, setDate] = useState<Date | null>(current);
 
   useEffect(() => {
-    setInnerCurrent(current);
+    setDate(current);
   }, [current]);
 
   return (
-    <header className="flex justify-between items-center px-4 py-2 bg-primaryDarker">
-      <div>
-        <p>{format(current, "yyyy")}</p>
-        <p>{format(current, "MM")}</p>
-      </div>
-
+    <>
       <Dialog
         open={isOpen}
         onClose={() => {
@@ -44,8 +40,8 @@ function Header(props: HeaderProps) {
             views={["year", "month"]}
             openTo="month"
             minDate={new Date(2021, 1, 1)}
-            value={innerCurrent}
-            onChange={setInnerCurrent}
+            value={date}
+            onChange={setDate}
             renderInput={() => <></>}
           />
         </LocalizationProvider>
@@ -55,7 +51,7 @@ function Header(props: HeaderProps) {
           </Button>
           <Button
             onClick={() => {
-              if (innerCurrent !== null) onChange(innerCurrent);
+              if (date !== null) onChange(date);
               setIsOpen(false);
             }}
           >
@@ -64,27 +60,34 @@ function Header(props: HeaderProps) {
         </div>
       </Dialog>
 
-      <div className="flex flex-col justify-center items-center">
-        <div
-          className="flex justify-center items-center w-20 h-20 p-2 rounded-full bg-secondary shadow-md"
-          aria-hidden
-          onClick={() => setIsOpen(true)}
-        >
-          <div className="flex justify-center items-center w-full h-full p-2 rounded-full bg-primaryDarker shadow-md">
-            <div className="flex justify-center items-center w-full h-full p-2 rounded-full bg-primary shadow-md">
-              <div className="flex justify-center items-center w-full h-full p-2 rounded-full bg-white shadow-md">
-                <EventNoteIcon className="w-full h-full" />
-              </div>
-            </div>
-          </div>
+      <header className="relative flex justify-center items-end px-4 py-2 bg-primaryDarker">
+        <div className="absolute left-4 bottom-2 text-white">
+          <p>{format(current, "yyyy")}</p>
+          <p className="text-5xl font-bold">{format(current, "MM")}</p>
         </div>
 
-        <p className="mt-2 font-medium text-white">
-          本月 <span>{formatCurrency(0)}</span>
-        </p>
-      </div>
-      <div />
-    </header>
+        <div className="flex flex-1 flex-col justify-center items-center">
+          <div
+            className="flex justify-center items-center w-20 h-20 p-2 rounded-full bg-secondary shadow-md"
+            aria-hidden
+            onClick={() => setIsOpen(true)}
+          >
+            <Circle bg="primaryDarker">
+              <Circle bg="primary">
+                <Circle bg="white">
+                  <EventNoteIcon className="w-full h-full" />
+                </Circle>
+              </Circle>
+            </Circle>
+          </div>
+
+          <p className="mt-2 font-medium text-white">
+            本月 <span>{formatCurrency(0)}</span>
+          </p>
+        </div>
+        <div />
+      </header>
+    </>
   );
 }
 
