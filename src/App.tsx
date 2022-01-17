@@ -1,14 +1,29 @@
 import { useState } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import Header from "@/components/Header";
 
+const theme = createTheme({
+  palette: {
+    secondary: {
+      light: "#D3DEDC",
+      main: "#92A9BD",
+      dark: "#7C99AC",
+      contrastText: "#FFEFEF",
+    },
+  },
+});
+
 function App() {
-  const [current] = useState<Date>(new Date());
+  const [current, setCurrent] = useState<Date>(new Date());
 
   return (
-    <main className="flex flex-col min-w-full min-h-screen">
-      <Header current={current} />
-      <div className="flex-1 bg-primary">content</div>
-    </main>
+    <ThemeProvider theme={theme}>
+      <main className="flex flex-col min-w-full min-h-screen">
+        <Header current={current} onChange={setCurrent} />
+        <div className="flex-1 bg-primaryLighter">content</div>
+      </main>
+    </ThemeProvider>
   );
 }
 
