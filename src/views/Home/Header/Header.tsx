@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable react/jsx-props-no-spreading */
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
@@ -9,6 +8,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
 import { formatCurrency } from "@/utils/currency";
+
 import Circle from "./Circle";
 
 interface HeaderProps {
@@ -40,6 +40,7 @@ function Header(props: HeaderProps) {
             views={["year", "month"]}
             openTo="month"
             minDate={new Date(2021, 1, 1)}
+            maxDate={new Date(2031, 1, 1)}
             value={date}
             onChange={setDate}
             renderInput={() => <></>}
