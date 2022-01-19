@@ -1,8 +1,9 @@
-import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import FirebaseProvider from "@/context/firebase";
 
-import Header from "@/components/Header";
+// views
+import Home from "@/views/Home";
 
 const theme = createTheme({
   palette: {
@@ -16,15 +17,10 @@ const theme = createTheme({
 });
 
 function App() {
-  const [current, setCurrent] = useState<Date>(new Date());
-
   return (
     <ThemeProvider theme={theme}>
       <FirebaseProvider>
-        <main className="flex flex-col min-w-full min-h-screen">
-          <Header current={current} onChange={setCurrent} />
-          <div className="flex-1 bg-primaryLighter">content</div>
-        </main>
+        <Home />
       </FirebaseProvider>
     </ThemeProvider>
   );
