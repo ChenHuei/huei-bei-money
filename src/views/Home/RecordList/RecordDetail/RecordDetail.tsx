@@ -2,7 +2,7 @@ import { format } from "date-fns";
 
 import { formatCurrency } from "@/utils/currency";
 
-interface ItemProps {
+interface RecordDetailProps {
   categoryName: string;
   subCategoryName: string;
   price: number;
@@ -10,7 +10,7 @@ interface ItemProps {
   updatedTime: number;
 }
 
-function Item(props: ItemProps) {
+function RecordDetail(props: RecordDetailProps) {
   const { categoryName, updatedTime, subCategoryName, description, price } =
     props;
 
@@ -30,5 +30,5 @@ function Item(props: ItemProps) {
   );
 }
 
-export default Item;
-export type { ItemProps };
+export default RecordDetail;
+export type { RecordDetailProps };
