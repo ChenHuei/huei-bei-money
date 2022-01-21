@@ -1,9 +1,10 @@
-import { formatCurrency } from "@/utils/currency";
+/* eslint-disable react/jsx-props-no-spreading */
+import Item, { ItemProps } from "./Item";
 
-interface HistoryItem {
+interface HistoryItem extends ItemProps {
   id: string;
-  createdBy: string;
-  price: number;
+  categoryId: string;
+  subCategoryId: string;
 }
 
 interface ListProps {
@@ -16,10 +17,7 @@ function List(props: ListProps) {
   return (
     <div>
       {list.map((item) => (
-        <div key={item.id}>
-          <p>{formatCurrency(item.price)}</p>
-          <p>{item.createdBy}</p>
-        </div>
+        <Item key={item.id} {...item} />
       ))}
     </div>
   );
