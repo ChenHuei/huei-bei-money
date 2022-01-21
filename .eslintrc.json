@@ -34,8 +34,9 @@
         "tsx": "never"
       }
     ],
+    "no-restricted-exports": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-    "no-restricted-exports": "off"
+    "react/jsx-props-no-spreading": "off"
   }
 }
