@@ -7,9 +7,9 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { FirebaseContext } from "@/context/firebase";
 
+import Transition from "@/components/Transition";
 import Header from "./Header";
 import RecordList, { Record } from "./RecordList";
-import Transition from "./Transition";
 import CategoryList, { Category } from "./CategoryList";
 
 function Home() {
