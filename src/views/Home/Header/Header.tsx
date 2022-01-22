@@ -1,15 +1,15 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useEffect, useState } from "react";
-import { format } from "date-fns";
+import { useEffect, useState } from 'react';
+import { format } from 'date-fns';
 
-import { Dialog, Button } from "@mui/material";
-import { LocalizationProvider, StaticDatePicker } from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import EventNoteIcon from "@mui/icons-material/EventNote";
+import { Dialog, Button } from '@mui/material';
+import { LocalizationProvider, StaticDatePicker } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
-import { formatCurrency } from "@/utils/currency";
+import { formatCurrency } from '@/utils/currency';
 
-import Circle from "./Circle";
+import Circle from './Circle';
 
 interface HeaderProps {
   current: Date;
@@ -37,7 +37,7 @@ function Header(props: HeaderProps) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <StaticDatePicker
             displayStaticWrapperAs="mobile"
-            views={["year", "month"]}
+            views={['year', 'month']}
             openTo="month"
             minDate={new Date(2021, 1, 1)}
             maxDate={new Date(2031, 1, 1)}
@@ -63,13 +63,13 @@ function Header(props: HeaderProps) {
 
       <header className="relative flex justify-center items-end px-4 py-2 bg-primaryDarker">
         <div className="absolute left-4 bottom-2 text-white">
-          <p>{format(current, "yyyy")}</p>
-          <p className="text-5xl font-bold">{format(current, "MM")}</p>
+          <p>{format(current, 'yyyy')}</p>
+          <p className="text-5xl font-bold">{format(current, 'MM')}</p>
         </div>
 
         <div className="flex flex-1 flex-col justify-center items-center">
           <div
-            className="flex justify-center items-center w-20 h-20 p-2 rounded-full bg-secondary shadow-md"
+            className="flex justify-center items-center w-20 h-20 p-2 rounded-full bg-pink shadow-md"
             aria-hidden
             onClick={() => setIsOpen(true)}
           >

@@ -8,10 +8,10 @@ import Home from '@/views/Home';
 const theme = createTheme({
   palette: {
     secondary: {
-      light: '#D3DEDC',
-      main: '#92A9BD',
-      dark: '#7C99AC',
-      contrastText: '#FFEFEF',
+      light: '#6998AB',
+      main: '#406882',
+      dark: '#1A374D',
+      contrastText: '#ffffff',
     },
   },
 });
