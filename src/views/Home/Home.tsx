@@ -1,16 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { collection, Firestore, getDocs } from "firebase/firestore/lite";
 import { format } from "date-fns";
-import { Dialog, Fab } from "@mui/material";
+import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 
 import { FirebaseContext } from "@/context/firebase";
 
-import Transition from "@/components/Transition";
 import Header from "./Header";
 import RecordList, { Record } from "./RecordList";
-import CategoryList, { Category } from "./CategoryList";
+import FormDialog from "./FormDialog";
+import { Category } from "./FormDialog/CategoryList";
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,22 +63,11 @@ function Home() {
         </Fab>
       </div>
 
-      <Dialog
-        fullScreen
-        open={isOpen}
+      <FormDialog
+        isOpen={isOpen}
+        categoryList={categoryList}
         onClose={() => setIsOpen(false)}
-        TransitionComponent={Transition}
-      >
-        <div className="flex p-4 text-white bg-primaryDarker">
-          <div className="mr-2" aria-hidden onClick={() => setIsOpen(false)}>
-            <CloseIcon />
-          </div>
-          <p>Create Record</p>
-        </div>
-        <div className="flex">
-          <CategoryList list={categoryList} />
-        </div>
-      </Dialog>
+      />
     </main>
   );
 }
