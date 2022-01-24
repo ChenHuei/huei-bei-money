@@ -1,14 +1,11 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
-
-import { Dialog, Button } from '@mui/material';
-import { LocalizationProvider, StaticDatePicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 
 import { formatCurrency } from '@/utils/currency';
 
+import DateDialog from '@/components/DateDialog';
 import Circle from './Circle';
 
 interface HeaderProps {
@@ -18,48 +15,18 @@ interface HeaderProps {
 
 function Header(props: HeaderProps) {
   const { current, onChange } = props;
-
   const [isOpen, setIsOpen] = useState(false);
-  const [date, setDate] = useState<Date | null>(current);
-
-  useEffect(() => {
-    setDate(current);
-  }, [current]);
 
   return (
     <>
-      <Dialog
-        open={isOpen}
-        onClose={() => {
-          setIsOpen(false);
-        }}
-      >
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <StaticDatePicker
-            displayStaticWrapperAs="mobile"
-            views={['year', 'month']}
-            openTo="month"
-            minDate={new Date(2021, 1, 1)}
-            maxDate={new Date(2031, 1, 1)}
-            value={date}
-            onChange={setDate}
-            renderInput={() => <></>}
-          />
-        </LocalizationProvider>
-        <div className="flex justify-end px-6 py-4">
-          <Button color="secondary" onClick={() => setIsOpen(false)}>
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              if (date !== null) onChange(date);
-              setIsOpen(false);
-            }}
-          >
-            Confirm
-          </Button>
-        </div>
-      </Dialog>
+      {isOpen && (
+        <DateDialog
+          value={current}
+          views={['year', 'month']}
+          onClose={() => setIsOpen(false)}
+          onChange={onChange}
+        />
+      )}
 
       <header className="relative flex justify-center items-end px-4 py-2 bg-primaryDarker">
         <div className="absolute left-4 bottom-2 text-white">
