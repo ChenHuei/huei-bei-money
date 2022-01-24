@@ -1,9 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-// eslint-disable-next-line import/no-unresolved
-import { registerSW } from "virtual:pwa-register";
-import App from "./App";
+import { Login } from '@mui/icons-material';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { registerSW } from 'virtual:pwa-register';
+import App from './App';
+import './index.css';
+
+import Home from './views/Home';
 
 const updateSW = registerSW({
   onNeedRefresh() {},
@@ -12,9 +15,16 @@ const updateSW = registerSW({
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 // eslint-disable-next-line import/prefer-default-export

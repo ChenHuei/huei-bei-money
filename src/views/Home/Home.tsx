@@ -1,4 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { Firestore } from 'firebase/firestore/lite';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -6,17 +7,14 @@ import AddIcon from '@mui/icons-material/Add';
 import { FirebaseContext } from '@/context/firebase';
 import { addRecordApi, getCategoryListApi, getRecordApi } from '@/api/home';
 
+import { OutletProps } from '@/App';
+
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
 import FormDialog, { Category } from './FormDialog';
 
-interface HomeProps {
-  setSnackbarState: Function;
-  setLoadingState: Function;
-}
-
-function Home(props: HomeProps) {
-  const { setSnackbarState, setLoadingState } = props;
+function Home() {
+  const { setSnackbarState, setLoadingState } = useOutletContext<OutletProps>();
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState<Date>(new Date());
   const [list, setList] = useState<Record[]>([]);
@@ -38,12 +36,12 @@ function Home(props: HomeProps) {
   }, [firebase, current]);
 
   return (
-    <main className="relative flex flex-col min-w-full min-h-screen">
+    <>
       <Header current={current} total={total} onChange={setCurrent} />
-      <div className="flex-1 p-4 bg-primaryLighter">
+      <div className="flex-1 p-4">
         <RecordList list={list} />
       </div>
-      <div className="fixed bottom-8 right-8">
+      <div className="fixed bottom-20 right-8">
         <Fab color="primary" aria-label="add" onClick={() => setIsOpen(true)}>
           <AddIcon />
         </Fab>
@@ -69,9 +67,8 @@ function Home(props: HomeProps) {
         }}
         onClose={() => setIsOpen(false)}
       />
-    </main>
+    </>
   );
 }
 
 export default Home;
-export type { HomeProps };

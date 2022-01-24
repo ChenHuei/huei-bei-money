@@ -1,14 +1,26 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/no-unstable-nested-components */
 import { useState } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Backdrop, CircularProgress, Snackbar } from '@mui/material';
+import {
+  Backdrop,
+  BottomNavigation,
+  BottomNavigationAction,
+  CircularProgress,
+  Snackbar,
+} from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
 
 import FirebaseProvider from '@/context/firebase';
 
-import Home from '@/views/Home';
-
 import Transition from './components/Transition';
+
+interface OutletProps {
+  setSnackbarState: Function;
+  setLoadingState: Function;
+}
 
 const theme = createTheme({
   palette: {
@@ -27,11 +39,25 @@ function App() {
     message: '',
   });
   const [loadingState, setLoadingState] = useState({ open: false });
+  const [tab, setTab] = useState(0);
 
   return (
     <ThemeProvider theme={theme}>
       <FirebaseProvider>
-        <Home setSnackbarState={setSnackbarState} setLoadingState={setLoadingState} />
+        <main className="relative flex flex-col min-w-full min-h-screen bg-primaryLighter">
+          <Outlet context={{ setSnackbarState, setLoadingState }} />
+        </main>
+        <BottomNavigation
+          className="sticky bottom-0 right-0"
+          showLabels
+          value={tab}
+          onChange={(_, newValue) => {
+            setTab(newValue);
+          }}
+        >
+          <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon />} />
+          <BottomNavigationAction component={Link} to="/login" label="User" icon={<PersonIcon />} />
+        </BottomNavigation>
         <Snackbar
           {...snackbarState}
           onClose={() => setSnackbarState({ open: false, message: '' })}
@@ -47,3 +73,4 @@ function App() {
 }
 
 export default App;
+export type { OutletProps };
