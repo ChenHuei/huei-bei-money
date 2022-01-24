@@ -13,6 +13,9 @@ module.exports = {
         highlightDarker: 'rgb(228, 39, 15)',
         pink: '#FFEFEF',
       },
+      zIndex: {
+        9999: 9999,
+      },
     },
   },
   plugins: [],
