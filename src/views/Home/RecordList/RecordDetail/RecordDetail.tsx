@@ -1,18 +1,17 @@
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
-import { formatCurrency } from "@/utils/currency";
+import { formatCurrency } from '@/utils/currency';
 
 interface RecordDetailProps {
+  date: number;
   categoryName: string;
   subCategoryName: string;
   price: number;
   description: string;
-  updatedTime: number;
 }
 
 function RecordDetail(props: RecordDetailProps) {
-  const { categoryName, updatedTime, subCategoryName, description, price } =
-    props;
+  const { date, categoryName, subCategoryName, description, price } = props;
 
   return (
     <div className="flex items-center mb-4">
@@ -20,7 +19,7 @@ function RecordDetail(props: RecordDetailProps) {
         <p>{categoryName}</p>
       </div>
       <div className="flex-1 mx-3">
-        <p>{format(updatedTime, "MM/dd")}</p>
+        <p>{format(date, 'MM/dd')}</p>
         <p>
           {subCategoryName} {description}
         </p>

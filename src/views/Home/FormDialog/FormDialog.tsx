@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useState, useMemo, useEffect } from 'react';
+import { format } from 'date-fns';
 import { useForm, Controller } from 'react-hook-form';
 import {
   AppBar,
@@ -14,26 +15,39 @@ import {
   TextField,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import EventIcon from '@mui/icons-material/Event';
 
 import Transition from '@/components/Transition';
+import DateDialog from '@/components/DateDialog';
 import Calculator from './Calculator';
-import { Category } from './CategoryList';
 import { Record } from '../RecordList';
+
+interface CategoryDetail {
+  id: string;
+  name: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  sort: number;
+  subCategory: CategoryDetail[];
+}
 
 interface FormDialogProps {
   isOpen: boolean;
   categoryList: Category[];
-  onConfirm: (data: Omit<Record, 'id' | 'updatedTime'>) => void;
+  onConfirm: (data: Omit<Record, 'id'>) => void;
   onClose: () => void;
 }
 
 function FormDialog(props: FormDialogProps) {
   const { isOpen, categoryList, onConfirm, onClose } = props;
   const [open, setOpen] = useState(false);
-  const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<
-    Omit<Record, 'id' | 'updatedTime'>
-  >({
+  const [openDate, setOpenDate] = useState(false);
+  const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<Omit<Record, 'id'>>({
     defaultValues: {
+      date: new Date().getTime(),
       categoryId: '',
       subCategoryId: '',
       categoryName: '',
@@ -59,11 +73,46 @@ function FormDialog(props: FormDialogProps) {
       <AppBar position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
-          <p>Create Record</p>
+          <p className="text-xl">Create Record</p>
         </Toolbar>
       </AppBar>
       <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
         <div className="flex-1">
+          <Controller
+            name="date"
+            control={control}
+            rules={{ required: '請輸入日期' }}
+            render={({ field: { value }, fieldState: { error } }) => (
+              <>
+                {openDate && (
+                  <DateDialog
+                    value={new Date(value)}
+                    views={['year', 'month', 'day']}
+                    onClose={() => setOpenDate(false)}
+                    onChange={(e) => setValue('date', e.getTime())}
+                  />
+                )}
+                <FormControl
+                  error={!!error}
+                  margin="normal"
+                  fullWidth
+                  onClick={() => setOpenDate(true)}
+                >
+                  <InputLabel htmlFor="date">Date</InputLabel>
+                  <OutlinedInput
+                    id="date"
+                    label="date"
+                    value={format(new Date(value), 'yyyy/MM/dd')}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <EventIcon />
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </>
+            )}
+          />
           <Controller
             name="categoryId"
             control={control}
