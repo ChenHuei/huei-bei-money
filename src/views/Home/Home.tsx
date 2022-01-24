@@ -29,11 +29,33 @@ function Home() {
       setCategoryList(categoryData);
     });
 
+  const onClose = () => setIsOpen(false);
+
+  const onConfirm = async (db: Firestore, data: Omit<Record, 'id'>) => {
+    setLoadingState({ open: true });
+    await addRecordApi(db, {
+      ...data,
+      createdBy: 'huei',
+    });
+    setCurrent(new Date(data.date));
+    setLoadingState({ open: false });
+    onClose();
+    setTimeout(() => {
+      setSnackbarState({ open: true, message: '新增成功' });
+    }, 166);
+  };
+
+  useEffect(() => {
+    if (firebase && categoryList.length) {
+      getRecordApi(firebase, current).then((data) => setList(data));
+    }
+  }, [firebase, current]);
+
   useEffect(() => {
     if (firebase) {
       init(firebase, current);
     }
-  }, [firebase, current]);
+  }, [firebase]);
 
   return (
     <>
@@ -51,21 +73,9 @@ function Home() {
         isOpen={isOpen}
         categoryList={categoryList}
         onConfirm={async (data) => {
-          if (firebase) {
-            setLoadingState({ open: true });
-            await addRecordApi(firebase, {
-              ...data,
-              createdBy: 'huei',
-            });
-            await init(firebase, new Date(data.date));
-            setIsOpen(false);
-            setLoadingState({ open: false });
-            setTimeout(() => {
-              setSnackbarState({ open: true, message: '新增成功' });
-            }, 166);
-          }
+          if (firebase) onConfirm(firebase, data);
         }}
-        onClose={() => setIsOpen(false)}
+        onClose={onClose}
       />
     </>
   );
