@@ -1,4 +1,3 @@
-import { Login } from '@mui/icons-material';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -7,6 +6,7 @@ import App from './App';
 import './index.css';
 
 import Home from './views/Home';
+import Login from './views/Login';
 
 const updateSW = registerSW({
   onNeedRefresh() {},
