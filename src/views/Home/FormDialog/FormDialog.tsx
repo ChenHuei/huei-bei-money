@@ -229,4 +229,4 @@ function FormDialog(props: FormDialogProps) {
 }
 
 export default FormDialog;
-export type { FormDialogProps };
+export type { FormDialogProps, Category };

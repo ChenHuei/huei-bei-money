@@ -27,7 +27,7 @@ function DateDialog(props: DateDialogProps) {
         <StaticDatePicker
           displayStaticWrapperAs="mobile"
           views={views}
-          openTo="month"
+          openTo={views[views.length - 1]}
           minDate={new Date(2021, 1, 1)}
           maxDate={new Date(2031, 1, 1)}
           value={innerValue}

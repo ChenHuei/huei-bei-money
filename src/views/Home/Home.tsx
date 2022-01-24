@@ -8,8 +8,7 @@ import { FirebaseContext } from '@/context/firebase';
 
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
-import FormDialog from './FormDialog';
-import { Category } from './FormDialog/CategoryList';
+import FormDialog, { Category } from './FormDialog';
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
