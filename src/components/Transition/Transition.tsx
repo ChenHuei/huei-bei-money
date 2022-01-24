@@ -1,6 +1,6 @@
-import { forwardRef, ReactElement, Ref } from "react";
-import { Slide } from "@mui/material";
-import { TransitionProps as MuiTransitionProps } from "@mui/material/transitions";
+import { forwardRef, ReactElement, Ref } from 'react';
+import { Slide } from '@mui/material';
+import { TransitionProps as MuiTransitionProps } from '@mui/material/transitions';
 
 interface TransitionProps extends MuiTransitionProps {
   children: ReactElement;

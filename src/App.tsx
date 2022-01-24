@@ -2,12 +2,13 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Backdrop, CircularProgress, Slide, Snackbar } from '@mui/material';
+import { Backdrop, CircularProgress, Snackbar } from '@mui/material';
 
 import FirebaseProvider from '@/context/firebase';
 
-// views
 import Home from '@/views/Home';
+
+import Transition from './components/Transition';
 
 const theme = createTheme({
   palette: {
@@ -34,7 +35,7 @@ function App() {
         <Snackbar
           {...snackbarState}
           onClose={() => setSnackbarState({ open: false, message: '' })}
-          TransitionComponent={(props) => <Slide {...props} direction="up" />}
+          TransitionComponent={Transition}
           autoHideDuration={1500}
         />
         <Backdrop className="text-white z-9999" open={loadingState.open}>

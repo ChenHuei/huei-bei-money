@@ -10,11 +10,12 @@ import Circle from './Circle';
 
 interface HeaderProps {
   current: Date;
+  total: number;
   onChange: (e: Date) => void;
 }
 
 function Header(props: HeaderProps) {
-  const { current, onChange } = props;
+  const { current, total, onChange } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -49,9 +50,7 @@ function Header(props: HeaderProps) {
             </Circle>
           </div>
 
-          <p className="mt-2 font-medium text-white">
-            本月 <span>{formatCurrency(0)}</span>
-          </p>
+          <p className="mt-2 font-medium text-white tracking-wider">{formatCurrency(total)}</p>
         </div>
         <div />
       </header>

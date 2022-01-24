@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Firestore } from 'firebase/firestore/lite';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -23,6 +23,8 @@ function Home(props: HomeProps) {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const firebase = useContext(FirebaseContext);
 
+  const total = useMemo(() => list.reduce((acc, item) => acc + item.price, 0), [list]);
+
   const init = (db: Firestore, date: Date) =>
     Promise.all([getRecordApi(db, date), getCategoryListApi(db)]).then(([data, categoryData]) => {
       setList(data);
@@ -37,7 +39,7 @@ function Home(props: HomeProps) {
 
   return (
     <main className="relative flex flex-col min-w-full min-h-screen">
-      <Header current={current} onChange={setCurrent} />
+      <Header current={current} total={total} onChange={setCurrent} />
       <div className="flex-1 p-4 bg-primaryLighter">
         <RecordList list={list} />
       </div>
