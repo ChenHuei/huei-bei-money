@@ -19,7 +19,7 @@ function RecordDetail(props: RecordDetailProps) {
         <p>{categoryName}</p>
       </div>
       <div className="flex-1 mx-3">
-        <p>{format(date, 'MM/dd')}</p>
+        <p>{format(new Date(date), 'MM/dd')}</p>
         <p>
           {subCategoryName} {description}
         </p>

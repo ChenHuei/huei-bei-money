@@ -58,11 +58,29 @@ function FormDialog(props: FormDialogProps) {
   });
 
   const currentCategoryId = watch('categoryId', '');
+  const currentSubCategoryId = watch('subCategoryId', '');
 
   const currentCategory = useMemo(
     () => categoryList.find((item) => item.id === currentCategoryId),
     [categoryList, currentCategoryId],
   );
+
+  useEffect(() => {
+    if (currentCategory) {
+      setValue('categoryName', currentCategory.name);
+    }
+  }, [currentCategory]);
+
+  useEffect(() => {
+    if (currentCategory) {
+      const currentSubCategory = currentCategory.subCategory.find(
+        (item) => item.id === currentSubCategoryId,
+      );
+      if (currentSubCategory) {
+        setValue('subCategoryName', currentSubCategory.name);
+      }
+    }
+  }, [currentCategory, currentSubCategoryId]);
 
   useEffect(() => {
     if (isOpen) reset();

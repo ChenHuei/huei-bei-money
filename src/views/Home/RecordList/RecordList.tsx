@@ -1,9 +1,10 @@
-import RecordDetail, { RecordDetailProps } from "./RecordDetail";
+import RecordDetail, { RecordDetailProps } from './RecordDetail';
 
 interface Record extends RecordDetailProps {
   id: string;
   categoryId: string;
   subCategoryId: string;
+  createdBy?: string;
 }
 
 interface RecordListProps {

@@ -1,46 +1,37 @@
 import { useContext, useEffect, useState } from 'react';
-import { collection, Firestore, getDocs } from 'firebase/firestore/lite';
-import { format } from 'date-fns';
+import { Firestore } from 'firebase/firestore/lite';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 import { FirebaseContext } from '@/context/firebase';
+import { addRecordApi, getCategoryListApi, getRecordApi } from '@/api/home';
 
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
 import FormDialog, { Category } from './FormDialog';
 
-function Home() {
+interface HomeProps {
+  setSnackbarState: Function;
+  setLoadingState: Function;
+}
+
+function Home(props: HomeProps) {
+  const { setSnackbarState, setLoadingState } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState<Date>(new Date());
   const [list, setList] = useState<Record[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const firebase = useContext(FirebaseContext);
 
-  const getCurrentListApi = async (db: Firestore, time: Date): Promise<Record[]> => {
-    const snapshot = await getDocs(collection(db, 'history', format(time, 'yyyyMM'), 'record'));
-    return snapshot.docs.map((item) => ({
-      id: item.id,
-      ...item.data(),
-    })) as Record[];
-  };
-
-  const getCategoryListApi = async (db: Firestore): Promise<Category[]> => {
-    const snapshot = await getDocs(collection(db, 'category'));
-    return snapshot.docs.map((item) => ({
-      id: item.id,
-      ...item.data(),
-    })) as Category[];
-  };
+  const init = (db: Firestore, date: Date) =>
+    Promise.all([getRecordApi(db, date), getCategoryListApi(db)]).then(([data, categoryData]) => {
+      setList(data);
+      setCategoryList(categoryData);
+    });
 
   useEffect(() => {
     if (firebase) {
-      Promise.all([getCurrentListApi(firebase, current), getCategoryListApi(firebase)]).then(
-        ([data, categoryData]) => {
-          setList(data);
-          setCategoryList(categoryData);
-        },
-      );
+      init(firebase, current);
     }
   }, [firebase, current]);
 
@@ -59,8 +50,20 @@ function Home() {
       <FormDialog
         isOpen={isOpen}
         categoryList={categoryList}
-        onConfirm={(data) => {
-          console.log('data', data);
+        onConfirm={async (data) => {
+          if (firebase) {
+            setLoadingState({ open: true });
+            await addRecordApi(firebase, {
+              ...data,
+              createdBy: 'huei',
+            });
+            await init(firebase, new Date(data.date));
+            setIsOpen(false);
+            setLoadingState({ open: false });
+            setTimeout(() => {
+              setSnackbarState({ open: true, message: '新增成功' });
+            }, 166);
+          }
         }}
         onClose={() => setIsOpen(false)}
       />
@@ -69,3 +72,4 @@ function Home() {
 }
 
 export default Home;
+export type { HomeProps };
