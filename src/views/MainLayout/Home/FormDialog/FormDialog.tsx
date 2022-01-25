@@ -248,7 +248,7 @@ function FormDialog(props: FormDialogProps) {
         </div>
         <div className="sticky bottom-0 left-0 h-12">
           <Button type="submit" className="h-full" variant="contained" color="secondary" fullWidth>
-            submit
+            {form === undefined ? '新增' : '儲存'}
           </Button>
         </div>
       </form>

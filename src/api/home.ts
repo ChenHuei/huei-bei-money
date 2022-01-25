@@ -37,8 +37,8 @@ export const updateRecordApi = (db: Firestore, data: RecordForm) =>
     ...data,
   });
 
-export const removeRecordApi = (db: Firestore, data: RecordForm) =>
-  deleteDoc(doc(db, 'history', format(data.date, 'yyyyMM'), 'record', data.id as string));
+export const removeRecordApi = (db: Firestore, date: number | Date, id: string) =>
+  deleteDoc(doc(db, 'history', format(date, 'yyyyMM'), 'record', id as string));
 
 export const getCategoryListApi = async (db: Firestore): Promise<Category[]> => {
   const snapshot = await getDocs(collection(db, 'category'));

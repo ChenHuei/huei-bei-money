@@ -67,4 +67,4 @@ function MainLayout() {
 }
 
 export default MainLayout;
-export { MainLayoutOutletProps };
+export type { MainLayoutOutletProps };
