@@ -12,7 +12,9 @@ function Layout() {
 
   return (
     <>
-      <Outlet context={{ setSnackbarState, setIsOpenLoading }} />
+      <main className="relative flex flex-col min-w-full min-h-screen bg-primaryLighter">
+        <Outlet context={{ setSnackbarState, setIsOpenLoading }} />
+      </main>
       <BottomNavigation
         className="sticky bottom-0 right-0"
         showLabels
@@ -21,8 +23,13 @@ function Layout() {
           setTab(newValue);
         }}
       >
-        <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon />} />
-        <BottomNavigationAction component={Link} to="/login" label="User" icon={<PersonIcon />} />
+        <BottomNavigationAction component={Link} to="/home" label="Home" icon={<HomeIcon />} />
+        <BottomNavigationAction
+          component={Link}
+          to="/home/user"
+          label="User"
+          icon={<PersonIcon />}
+        />
       </BottomNavigation>
     </>
   );

@@ -31,9 +31,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <FirebaseProvider>
-        <main className="relative flex flex-col min-w-full min-h-screen bg-primaryLighter">
-          <Outlet context={{ setSnackbarState, setIsOpenLoading }} />
-        </main>
+        <Outlet context={{ setSnackbarState, setIsOpenLoading }} />
         <Snackbar
           {...snackbarState}
           onClose={() => setSnackbarState({ open: false, message: '' })}
