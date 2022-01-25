@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Button, TextField } from '@mui/material';
+import { OutletProps } from '@/App';
 
 interface LoginForm {
   email: string;
@@ -8,6 +11,8 @@ interface LoginForm {
 }
 
 function Login() {
+  const navigate = useNavigate();
+  const { setSnackbarState, setIsOpenLoading } = useOutletContext<OutletProps>();
   const { control, handleSubmit, setValue } = useForm<LoginForm>({
     defaultValues: {
       email: '',
@@ -16,15 +21,18 @@ function Login() {
   });
 
   const onConfirm = (data: LoginForm): void => {
-    const { email, password } = data;
     const auth = getAuth();
+    const { email, password } = data;
+    setIsOpenLoading(true);
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
-        // ...
+      .then(() => {
+        navigate('/home');
       })
-      .catch((e) => {
-        console.log('error', e);
+      .catch(() => {
+        setSnackbarState({ open: true, message: '登入失敗' });
+      })
+      .finally(() => {
+        setIsOpenLoading(false);
       });
   };
 
@@ -36,12 +44,14 @@ function Login() {
         <Controller
           name="email"
           control={control}
-          render={({ field: { value } }) => (
+          rules={{ required: '請輸入帳號' }}
+          render={({ field: { value }, fieldState: { error } }) => (
             <TextField
               id="email"
               label="信箱"
               margin="normal"
               value={value}
+              error={!!error}
               fullWidth
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setValue('email', e.target.value)
@@ -52,13 +62,15 @@ function Login() {
         <Controller
           name="password"
           control={control}
-          render={({ field: { value } }) => (
+          rules={{ required: '請輸入密碼' }}
+          render={({ field: { value }, fieldState: { error } }) => (
             <TextField
               id="password"
               type="password"
               label="帳號"
               margin="normal"
               value={value}
+              error={!!error}
               fullWidth
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setValue('password', e.target.value)

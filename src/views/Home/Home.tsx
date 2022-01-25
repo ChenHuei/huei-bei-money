@@ -14,7 +14,7 @@ import RecordList, { Record } from './RecordList';
 import FormDialog, { Category } from './FormDialog';
 
 function Home() {
-  const { setSnackbarState, setLoadingState } = useOutletContext<OutletProps>();
+  const { setSnackbarState, setIsOpenLoading } = useOutletContext<OutletProps>();
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState<Date>(new Date());
   const [list, setList] = useState<Record[]>([]);
@@ -32,13 +32,13 @@ function Home() {
   const onClose = () => setIsOpen(false);
 
   const onConfirm = async (db: Firestore, data: Omit<Record, 'id'>) => {
-    setLoadingState({ open: true });
+    setIsOpenLoading(true);
     await addRecordApi(db, {
       ...data,
       createdBy: 'huei',
     });
     setCurrent(new Date(data.date));
-    setLoadingState({ open: false });
+    setIsOpenLoading(false);
     onClose();
     setTimeout(() => {
       setSnackbarState({ open: true, message: '新增成功' });
