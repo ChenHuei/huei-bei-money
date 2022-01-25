@@ -7,14 +7,13 @@ import AddIcon from '@mui/icons-material/Add';
 import { FirebaseContext } from '@/context/firebase';
 import { addRecordApi, getCategoryListApi, getRecordApi } from '@/api/home';
 
-import { OutletProps } from '@/App';
-
+import { MainLayoutOutletProps } from '../MainLayout';
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
 import FormDialog, { Category } from './FormDialog';
 
 function Home() {
-  const { setSnackbarState, setIsOpenLoading } = useOutletContext<OutletProps>();
+  const { setSnackbarState, setIsOpenLoading, user } = useOutletContext<MainLayoutOutletProps>();
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState<Date>(new Date());
   const [list, setList] = useState<Record[]>([]);
@@ -35,7 +34,7 @@ function Home() {
     setIsOpenLoading(true);
     await addRecordApi(db, {
       ...data,
-      createdBy: 'huei',
+      createdBy: user.displayName ?? '',
     });
     setCurrent(new Date(data.date));
     setIsOpenLoading(false);

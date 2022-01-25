@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Button, TextField } from '@mui/material';
-import { OutletProps } from '@/App';
+import { AppOutletProps } from '@/App';
 
 interface LoginForm {
   email: string;
@@ -12,7 +12,7 @@ interface LoginForm {
 
 function Login() {
   const navigate = useNavigate();
-  const { setSnackbarState, setIsOpenLoading } = useOutletContext<OutletProps>();
+  const { setSnackbarState, setIsOpenLoading } = useOutletContext<AppOutletProps>();
   const { control, handleSubmit, setValue } = useForm<LoginForm>({
     defaultValues: {
       email: '',

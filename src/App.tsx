@@ -5,7 +5,7 @@ import { Backdrop, CircularProgress, createTheme, Snackbar, ThemeProvider } from
 import Transition from './components/Transition';
 import FirebaseProvider from './context/firebase';
 
-interface OutletProps {
+interface AppOutletProps {
   setSnackbarState: Function;
   setIsOpenLoading: Function;
 }
@@ -47,4 +47,4 @@ function App() {
 }
 
 export default App;
-export type { OutletProps };
+export type { AppOutletProps };
