@@ -97,6 +97,7 @@ function Home() {
       <Header current={currentDate} total={total} onChange={setCurrentDate} />
       <div className="flex-1 p-4">
         <RecordList
+          user={user}
           list={list}
           onClick={(data) => {
             setIsOpen(true);
