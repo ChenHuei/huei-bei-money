@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { registerSW } from 'virtual:pwa-register';
 import App from './App';
-import Layout from './views/Layout';
 import './index.css';
 
 import Login from './views/Login';
-import Home from './views/Layout/Home';
-import User from './views/Layout/User';
+import MainLayout from './views/MainLayout';
+import Home from './views/MainLayout/Home';
+import User from './views/MainLayout/User';
 
 const updateSW = registerSW({
   onNeedRefresh() {},
@@ -20,7 +20,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="home" element={<Layout />}>
+          <Route path="home" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="user" element={<User />} />
           </Route>

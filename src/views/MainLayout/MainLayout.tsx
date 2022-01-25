@@ -6,7 +6,7 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import { OutletProps } from '@/App';
 
-function Layout() {
+function MainLayout() {
   const { setSnackbarState, setIsOpenLoading } = useOutletContext<OutletProps>();
   const [tab, setTab] = useState(0);
 
@@ -35,4 +35,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default MainLayout;

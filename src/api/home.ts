@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import { addDoc, collection, Firestore, getDocs } from 'firebase/firestore/lite';
 
-import { Record } from '@/views/Layout/Home/RecordList';
-import { Category } from '@/views/Layout/Home/FormDialog';
+import { Record } from '@/views/MainLayout/Home/RecordList';
+import { Category } from '@/views/MainLayout/Home/FormDialog';
 
 export const getRecordApi = async (db: Firestore, time: Date): Promise<Record[]> => {
   const snapshot = await getDocs(collection(db, 'history', format(time, 'yyyyMM'), 'record'));
