@@ -1,11 +1,20 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore/lite';
+import { format } from 'date-fns';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 import { FirebaseContext } from '@/context/firebase';
-import { addRecordApi, updateRecordApi, getCategoryListApi, getRecordApi } from '@/api/home';
+import {
+  addRecordApi,
+  updateRecordApi,
+  getCategoryListApi,
+  getRecordApi,
+  removeRecordApi,
+} from '@/api/home';
 
 import { MainLayoutOutletProps } from '../MainLayout';
 import Header from './Header';
@@ -34,18 +43,40 @@ function Home() {
     setIsOpen(false);
   };
 
-  const onConfirm = async (db: Firestore, data: RecordForm) => {
+  const onCreateConfirm = async (db: Firestore, data: RecordForm, user: User) => {
     setIsOpenLoading(true);
-    const request = {
+    await addRecordApi(db, {
       ...data,
       createdBy: user.displayName ?? '',
-    };
-    await (form ? updateRecordApi(db, request) : addRecordApi(db, request));
+    });
     setCurrent(new Date(data.date));
     setIsOpenLoading(false);
     onClose();
     setTimeout(() => {
-      setSnackbarState({ open: true, message: `${form ? '編輯' : '新增'}成功` });
+      setSnackbarState({ open: true, message: '新增成功' });
+    }, 166);
+  };
+
+  const onUpdateConfirm = async (db: Firestore, data: RecordForm, user: User) => {
+    setIsOpenLoading(true);
+
+    if (format((form as RecordForm).date, 'yyyyMM') !== format(data.date, 'yyyyMM')) {
+      await removeRecordApi(db, form as RecordForm);
+      await addRecordApi(db, {
+        ...data,
+        createdBy: user.displayName ?? '',
+      });
+    } else {
+      await updateRecordApi(db, {
+        ...data,
+        createdBy: user.displayName ?? '',
+      });
+    }
+    setCurrent(new Date(data.date));
+    setIsOpenLoading(false);
+    onClose();
+    setTimeout(() => {
+      setSnackbarState({ open: true, message: '編輯成功' });
     }, 166);
   };
 
@@ -84,7 +115,13 @@ function Home() {
         form={form}
         categoryList={categoryList}
         onConfirm={(data) => {
-          if (firebase) onConfirm(firebase, data);
+          if (firebase) {
+            if (form) {
+              onUpdateConfirm(firebase, data, user);
+            } else {
+              onCreateConfirm(firebase, data, user);
+            }
+          }
         }}
         onClose={onClose}
       />
