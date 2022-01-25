@@ -8,13 +8,14 @@ interface RecordDetailProps {
   subCategoryName: string;
   price: number;
   description: string;
+  onClick: () => void;
 }
 
 function RecordDetail(props: RecordDetailProps) {
-  const { date, categoryName, subCategoryName, description, price } = props;
+  const { date, categoryName, subCategoryName, description, price, onClick } = props;
 
   return (
-    <div className="flex items-center mb-4">
+    <div className="flex items-center mb-4" aria-hidden onClick={() => onClick()}>
       <div className="w-8 h-8 flex justify-center items-center bg-primary text-white rounded-lg">
         <p>{categoryName}</p>
       </div>

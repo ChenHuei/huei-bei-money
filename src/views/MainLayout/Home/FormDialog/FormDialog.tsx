@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useState, useMemo, useEffect } from 'react';
 import { format } from 'date-fns';
@@ -34,18 +35,21 @@ interface Category {
   subCategory: CategoryDetail[];
 }
 
+type RecordForm = Omit<Record, 'id'> & { id?: string };
+
 interface FormDialogProps {
   isOpen: boolean;
+  form?: RecordForm;
   categoryList: Category[];
-  onConfirm: (data: Omit<Record, 'id'>) => void;
+  onConfirm: (data: RecordForm) => void;
   onClose: () => void;
 }
 
 function FormDialog(props: FormDialogProps) {
-  const { isOpen, categoryList, onConfirm, onClose } = props;
+  const { isOpen, form, categoryList, onConfirm, onClose } = props;
   const [open, setOpen] = useState(false);
   const [openDate, setOpenDate] = useState(false);
-  const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<Omit<Record, 'id'>>({
+  const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<RecordForm>({
     defaultValues: {
       date: new Date().getTime(),
       categoryId: '',
@@ -58,7 +62,6 @@ function FormDialog(props: FormDialogProps) {
   });
 
   const currentCategoryId = watch('categoryId', '');
-  const currentSubCategoryId = watch('subCategoryId', '');
 
   const currentCategory = useMemo(
     () => categoryList.find((item) => item.id === currentCategoryId),
@@ -72,18 +75,15 @@ function FormDialog(props: FormDialogProps) {
   }, [currentCategory]);
 
   useEffect(() => {
-    if (currentCategory) {
-      const currentSubCategory = currentCategory.subCategory.find(
-        (item) => item.id === currentSubCategoryId,
-      );
-      if (currentSubCategory) {
-        setValue('subCategoryName', currentSubCategory.name);
+    if (isOpen) {
+      reset();
+
+      if (form) {
+        Object.entries(form).forEach(([key, value]) => {
+          setValue(key as keyof RecordForm, value);
+        });
       }
     }
-  }, [currentCategory, currentSubCategoryId]);
-
-  useEffect(() => {
-    if (isOpen) reset();
   }, [isOpen]);
 
   return (
@@ -91,7 +91,7 @@ function FormDialog(props: FormDialogProps) {
       <AppBar position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
-          <p className="text-xl">Create Record</p>
+          <p className="text-xl">{form ? 'Edit' : 'Create'} Record</p>
         </Toolbar>
       </AppBar>
       <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
@@ -170,7 +170,17 @@ function FormDialog(props: FormDialogProps) {
                 error={!!error}
                 fullWidth
                 select
-                onChange={(e) => setValue('subCategoryId', e.target.value)}
+                onChange={(e) => {
+                  const { value: val } = e.target;
+
+                  setValue('subCategoryId', val);
+                  const currentSubCategory = (currentCategory as Category).subCategory.find(
+                    (item) => item.id === val,
+                  );
+                  if (currentSubCategory) {
+                    setValue('subCategoryName', currentSubCategory.name);
+                  }
+                }}
               >
                 {currentCategory ? (
                   currentCategory.subCategory.map((item) => (
@@ -247,4 +257,4 @@ function FormDialog(props: FormDialogProps) {
 }
 
 export default FormDialog;
-export type { FormDialogProps, Category };
+export type { FormDialogProps, Category, RecordForm };

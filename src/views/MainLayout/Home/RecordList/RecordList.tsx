@@ -1,6 +1,6 @@
 import RecordDetail, { RecordDetailProps } from './RecordDetail';
 
-interface Record extends RecordDetailProps {
+interface Record extends Omit<RecordDetailProps, 'onClick'> {
   id: string;
   categoryId: string;
   subCategoryId: string;
@@ -9,15 +9,16 @@ interface Record extends RecordDetailProps {
 
 interface RecordListProps {
   list: Record[];
+  onClick: (data: Record) => void;
 }
 
 function RecordList(props: RecordListProps) {
-  const { list } = props;
+  const { list, onClick } = props;
 
   return (
     <div>
       {list.map((item) => (
-        <RecordDetail key={item.id} {...item} />
+        <RecordDetail key={item.id} {...item} onClick={() => onClick(item)} />
       ))}
     </div>
   );
