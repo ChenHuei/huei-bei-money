@@ -14,12 +14,14 @@ import {
   MenuItem,
   OutlinedInput,
   TextField,
+  Stack,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import EventIcon from '@mui/icons-material/Event';
 
 import Transition from '@/components/Transition';
 import DateDialog from '@/components/DateDialog';
+import AlertDialog from './AlertDialog';
 import Calculator from './Calculator';
 import { Record } from '../RecordList';
 
@@ -42,13 +44,15 @@ interface FormDialogProps {
   form?: RecordForm;
   categoryList: Category[];
   onConfirm: (data: RecordForm) => void;
+  onDelete: (data: RecordForm) => void;
   onClose: () => void;
 }
 
 function FormDialog(props: FormDialogProps) {
-  const { isOpen, form, categoryList, onConfirm, onClose } = props;
+  const { isOpen, form, categoryList, onConfirm, onDelete, onClose } = props;
   const [open, setOpen] = useState(false);
   const [openDate, setOpenDate] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<RecordForm>({
     defaultValues: {
       date: new Date().getTime(),
@@ -88,6 +92,13 @@ function FormDialog(props: FormDialogProps) {
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+      {openAlert && (
+        <AlertDialog
+          title={`確定要刪除 ${format(getValues('date'), 'yyyy/MM/dd')} 這一筆紀錄嗎 ?`}
+          onConfirm={() => onDelete(getValues())}
+          onClose={() => setOpenAlert(false)}
+        />
+      )}
       <AppBar position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
@@ -246,11 +257,22 @@ function FormDialog(props: FormDialogProps) {
             )}
           />
         </div>
-        <div className="sticky bottom-0 left-0 h-12">
+        <Stack direction="row" spacing={2} className="sticky bottom-0 left-0 h-12 flex">
+          {form !== undefined && (
+            <Button
+              className="h-full"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              onClick={() => setOpenAlert(true)}
+            >
+              刪除
+            </Button>
+          )}
           <Button type="submit" className="h-full" variant="contained" color="secondary" fullWidth>
             {form === undefined ? '新增' : '儲存'}
           </Button>
-        </div>
+        </Stack>
       </form>
     </Dialog>
   );

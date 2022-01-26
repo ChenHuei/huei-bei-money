@@ -25,7 +25,7 @@ import FormDialog, { Category, RecordForm } from './FormDialog';
 function Home() {
   const firebase = useFirebase();
   const { setSnackbarState, setIsOpenLoading, user } = useOutletContext<MainLayoutOutletProps>();
-  const [isOpen, setIsOpen] = useState(false);
+  const [openFormDialog, setOpenFormDialog] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [form, setForm] = useState<RecordForm | undefined>(undefined);
   const [list, setList] = useState<Record[]>([]);
@@ -41,7 +41,7 @@ function Home() {
 
   const onClose = () => {
     setForm(undefined);
-    setIsOpen(false);
+    setOpenFormDialog(false);
   };
 
   const onConfirm = async (
@@ -51,14 +51,15 @@ function Home() {
     user: User,
   ) => {
     try {
-      setIsOpenLoading(true);
-
+      const { price, categoryName } = data;
       const request = {
         ...data,
+        price: price * (categoryName === '收' ? 1 : -1),
         createdBy: user.displayName ?? '',
       };
       const isEditFlow = form !== undefined;
 
+      setIsOpenLoading(true);
       if (isEditFlow) {
         if (differentInMonthOrYear(form.date, data.date)) {
           await Promise.all([
@@ -75,6 +76,23 @@ function Home() {
       setCurrentDate(new Date(data.date));
       onClose();
       setSnackbarState({ open: true, message: `${isEditFlow ? '編輯' : '新增'}成功` });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsOpenLoading(false);
+    }
+  };
+
+  const onDelete = async (db: Firestore, data: RecordForm) => {
+    try {
+      const { date, id } = data;
+      setIsOpenLoading(true);
+      removeRecordApi(db, date, id as string);
+      onClose();
+      setSnackbarState({ open: true, message: '刪除成功' });
+      setTimeout(() => {
+        getRecordApi(db, date).then((data) => setList(data));
+      }, 166);
     } catch (e) {
       console.error(e);
     } finally {
@@ -100,23 +118,26 @@ function Home() {
           user={user}
           list={list}
           onClick={(data) => {
-            setIsOpen(true);
+            setOpenFormDialog(true);
             setForm(data);
           }}
         />
       </div>
       <div className="fixed bottom-20 right-8">
-        <Fab color="primary" aria-label="add" onClick={() => setIsOpen(true)}>
+        <Fab color="primary" aria-label="add" onClick={() => setOpenFormDialog(true)}>
           <AddIcon />
         </Fab>
       </div>
 
       <FormDialog
-        isOpen={isOpen}
+        isOpen={openFormDialog}
         form={form}
         categoryList={categoryList}
         onConfirm={(data) => {
           onConfirm(firebase, data, form, user);
+        }}
+        onDelete={(data) => {
+          onDelete(firebase, data);
         }}
         onClose={onClose}
       />

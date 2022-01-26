@@ -12,7 +12,7 @@ import {
 import { Record } from '@/views/MainLayout/Home/RecordList';
 import { Category, RecordForm } from '@/views/MainLayout/Home/FormDialog';
 
-export const getRecordApi = async (db: Firestore, time: Date): Promise<Record[]> => {
+export const getRecordApi = async (db: Firestore, time: Date | number): Promise<Record[]> => {
   const snapshot = await getDocs(collection(db, 'history', format(time, 'yyyyMM'), 'record'));
   return snapshot.docs
     .map(
