@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { Auth, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Button, TextField } from '@mui/material';
 import { AppOutletProps } from '@/App';
 
@@ -20,8 +20,9 @@ function Login() {
     },
   });
 
-  const onConfirm = (data: LoginForm): void => {
-    const auth = getAuth();
+  const auth = getAuth();
+
+  const onConfirm = (auth: Auth, data: LoginForm): void => {
     const { email, password } = data;
     setIsOpenLoading(true);
     signInWithEmailAndPassword(auth, email, password)
@@ -41,11 +42,11 @@ function Login() {
       <div className="bg-white p-4">
         <h1 className="text-3xl text-secondary font-bold">Huei Bei Money</h1>
         <p className="text-xl mt-4 mb-2s">👵🏻👴🏿</p>
-        <form onSubmit={handleSubmit(onConfirm)}>
+        <form onSubmit={handleSubmit((data) => onConfirm(auth, data))}>
           <Controller
             name="email"
             control={control}
-            rules={{ required: '請輸入帳號' }}
+            rules={{ required: '請輸入信箱' }}
             render={({ field: { value }, fieldState: { error } }) => (
               <TextField
                 id="email"
@@ -68,7 +69,7 @@ function Login() {
               <TextField
                 id="password"
                 type="password"
-                label="帳號"
+                label="密碼"
                 margin="normal"
                 value={value}
                 error={!!error}

@@ -37,7 +37,7 @@ function DateDialog(props: DateDialogProps) {
       </LocalizationProvider>
       <div className="flex justify-end px-6 py-4">
         <Button color="secondary" onClick={() => onClose()}>
-          Cancel
+          取消
         </Button>
         <Button
           onClick={() => {
@@ -45,7 +45,7 @@ function DateDialog(props: DateDialogProps) {
             onClose();
           }}
         >
-          Confirm
+          確認
         </Button>
       </div>
     </Dialog>

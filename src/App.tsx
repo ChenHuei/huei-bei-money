@@ -31,7 +31,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <FirebaseProvider>
-        <Outlet context={{ setSnackbarState, setIsOpenLoading }} />
+        <Outlet context={{ setSnackbarState, setIsOpenLoading } as AppOutletProps} />
         <Snackbar
           {...snackbarState}
           onClose={() => setSnackbarState({ open: false, message: '' })}

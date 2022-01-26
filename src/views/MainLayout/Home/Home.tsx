@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore/lite';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -17,6 +16,7 @@ import {
 import { differentInMonthOrYear } from '@/utils/date';
 
 import { useFirebase } from '@/hooks/useFirebase';
+import { INCOME_CATEGORY_ID } from '@/constants/home';
 import { MainLayoutOutletProps } from '../MainLayout';
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
@@ -31,51 +31,85 @@ function Home() {
   const [list, setList] = useState<Record[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
-  const total = useMemo(() => list.reduce((acc, item) => acc + item.price, 0), [list]);
+  const total = useMemo(
+    () =>
+      list.reduce(
+        (acc, item) => acc + (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1) * item.price,
+        0,
+      ),
+    [list],
+  );
 
-  const init = (db: Firestore, date: Date) =>
-    Promise.all([getRecordApi(db, date), getCategoryListApi(db)]).then(([data, categoryData]) => {
-      setList(data);
-      setCategoryList(categoryData);
-    });
-
-  const onClose = () => {
+  const onClose = useCallback(() => {
     setForm(undefined);
     setOpenFormDialog(false);
+  }, []);
+
+  const init = useCallback(async (db: Firestore, date: number | Date) => {
+    try {
+      setIsOpenLoading(true);
+
+      await Promise.all([
+        getRecordApi(db, date),
+        ...(categoryList.length === 0 ? [getCategoryListApi(db)] : []),
+      ]).then(([data, categoryData]) => {
+        setList(data);
+        setCategoryList(categoryData);
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsOpenLoading(false);
+    }
+  }, []);
+
+  const onCreate = async (db: Firestore, data: RecordForm, userName: string) => {
+    try {
+      const { date } = data;
+      setIsOpenLoading(true);
+
+      await addRecordApi(db, {
+        ...data,
+        createdBy: userName,
+      });
+
+      setCurrentDate(new Date(date));
+      setSnackbarState({ open: true, message: '新增成功' });
+      onClose();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsOpenLoading(false);
+    }
   };
 
-  const onConfirm = async (
+  const onUpdate = async (
     db: Firestore,
     data: RecordForm,
-    form: RecordForm | undefined,
-    user: User,
+    originData: RecordForm,
+    userName: string,
   ) => {
     try {
-      const { price, categoryName } = data;
+      const { date: originDate, id } = originData;
+      const { date } = data;
       const request = {
         ...data,
-        price: price * (categoryName === '收' ? 1 : -1),
-        createdBy: user.displayName ?? '',
+        createdBy: userName,
       };
-      const isEditFlow = form !== undefined;
-
       setIsOpenLoading(true);
-      if (isEditFlow) {
-        if (differentInMonthOrYear(form.date, data.date)) {
-          await Promise.all([
-            removeRecordApi(db, form.date, form.id as string),
-            addRecordApi(db, request),
-          ]);
-        } else {
-          await updateRecordApi(db, request);
-        }
+
+      if (differentInMonthOrYear(originDate, date)) {
+        await Promise.all([
+          removeRecordApi(db, originDate, id as string),
+          addRecordApi(db, request),
+        ]);
       } else {
-        await addRecordApi(db, request);
+        await updateRecordApi(db, request);
       }
 
-      setCurrentDate(new Date(data.date));
+      setCurrentDate(new Date(date));
+      setSnackbarState({ open: true, message: '編輯成功' });
       onClose();
-      setSnackbarState({ open: true, message: `${isEditFlow ? '編輯' : '新增'}成功` });
     } catch (e) {
       console.error(e);
     } finally {
@@ -87,12 +121,11 @@ function Home() {
     try {
       const { date, id } = data;
       setIsOpenLoading(true);
-      removeRecordApi(db, date, id as string);
-      onClose();
+
+      await removeRecordApi(db, date, id as string);
       setSnackbarState({ open: true, message: '刪除成功' });
-      setTimeout(() => {
-        getRecordApi(db, date).then((data) => setList(data));
-      }, 166);
+      onClose();
+      init(db, date);
     } catch (e) {
       console.error(e);
     } finally {
@@ -101,14 +134,8 @@ function Home() {
   };
 
   useEffect(() => {
-    if (categoryList.length) {
-      getRecordApi(firebase, currentDate).then((data) => setList(data));
-    }
-  }, [currentDate]);
-
-  useEffect(() => {
     init(firebase, currentDate);
-  }, []);
+  }, [currentDate]);
 
   return (
     <>
@@ -134,7 +161,12 @@ function Home() {
         form={form}
         categoryList={categoryList}
         onConfirm={(data) => {
-          onConfirm(firebase, data, form, user);
+          const userName = user.displayName ?? '';
+          if (form) {
+            onUpdate(firebase, data, form, userName);
+          } else {
+            onCreate(firebase, data, userName);
+          }
         }}
         onDelete={(data) => {
           onDelete(firebase, data);

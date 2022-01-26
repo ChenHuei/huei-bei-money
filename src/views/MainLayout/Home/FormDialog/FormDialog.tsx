@@ -127,7 +127,7 @@ function FormDialog(props: FormDialogProps) {
                   fullWidth
                   onClick={() => setOpenDate(true)}
                 >
-                  <InputLabel htmlFor="date">Date</InputLabel>
+                  <InputLabel htmlFor="date">日期</InputLabel>
                   <OutlinedInput
                     id="date"
                     label="date"

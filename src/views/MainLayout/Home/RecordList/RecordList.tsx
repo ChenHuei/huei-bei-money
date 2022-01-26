@@ -1,7 +1,8 @@
 import { User } from 'firebase/auth';
+import { INCOME_CATEGORY_ID } from '@/constants/home';
 import RecordDetail, { RecordDetailProps } from './RecordDetail';
 
-interface Record extends Omit<RecordDetailProps, 'isSelf' | 'onClick'> {
+interface Record extends Omit<RecordDetailProps, 'isSelf' | 'isIncome' | 'onClick'> {
   id: string;
   categoryId: string;
   subCategoryId: string;
@@ -21,8 +22,9 @@ function RecordList(props: RecordListProps) {
       {list.map((item) => (
         <RecordDetail
           key={item.id}
-          isSelf={user.displayName === item.createdBy}
           {...item}
+          isSelf={user.displayName === item.createdBy}
+          isIncome={item.categoryId === INCOME_CATEGORY_ID}
           onClick={() => onClick(item)}
         />
       ))}

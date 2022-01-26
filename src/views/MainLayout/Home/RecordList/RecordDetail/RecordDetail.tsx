@@ -5,6 +5,7 @@ import { formatCurrency } from '@/utils/currency';
 
 interface RecordDetailProps {
   isSelf: boolean;
+  isIncome: boolean;
   date: number;
   categoryName: string;
   subCategoryName: string;
@@ -15,8 +16,17 @@ interface RecordDetailProps {
 }
 
 function RecordDetail(props: RecordDetailProps) {
-  const { isSelf, date, categoryName, subCategoryName, description, price, createdBy, onClick } =
-    props;
+  const {
+    isSelf,
+    isIncome,
+    date,
+    categoryName,
+    subCategoryName,
+    description,
+    price,
+    createdBy,
+    onClick,
+  } = props;
 
   return (
     <div className="flex items-center mb-4" aria-hidden onClick={() => isSelf && onClick()}>
@@ -37,7 +47,7 @@ function RecordDetail(props: RecordDetailProps) {
           {subCategoryName} {description}
         </p>
       </div>
-      <p>{formatCurrency(price)}</p>
+      <p>{formatCurrency(price * (isIncome ? 1 : -1))}</p>
     </div>
   );
 }
