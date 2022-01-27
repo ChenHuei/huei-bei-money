@@ -99,13 +99,13 @@ function FormDialog(props: FormDialogProps) {
           onClose={() => setOpenAlert(false)}
         />
       )}
-      <AppBar position="sticky" color="secondary">
+      <AppBar className="px-2 py-1" position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
           <p className="text-xl">{form ? 'Edit' : 'Create'} Record</p>
         </Toolbar>
       </AppBar>
-      <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
+      <form className="flex flex-col flex-1 p-6" onSubmit={handleSubmit(onConfirm)}>
         <div className="flex-1">
           <Controller
             name="date"
