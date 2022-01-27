@@ -142,7 +142,7 @@ function Home() {
   return (
     <>
       <Header current={currentDate} total={total} onChange={setCurrentDate} />
-      <div className="flex-1 px-6 py-4">
+      <div className="flex-1 p-4">
         <RecordList
           user={user}
           list={list}
