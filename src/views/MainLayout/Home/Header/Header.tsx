@@ -29,8 +29,8 @@ function Header(props: HeaderProps) {
         />
       )}
 
-      <header className="relative flex justify-center items-end px-4 py-2 bg-primaryDarker">
-        <div className="absolute left-4 bottom-2 text-white">
+      <header className="relative flex justify-center items-end px-6 py-4 bg-primaryDarker">
+        <div className="absolute left-6 bottom-4 text-white">
           <p>{format(current, 'yyyy')}</p>
           <p className="text-5xl font-bold">{format(current, 'MM')}</p>
         </div>

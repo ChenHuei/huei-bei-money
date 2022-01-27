@@ -33,11 +33,13 @@ function Home() {
 
   const total = useMemo(
     () =>
-      list.reduce(
-        (acc, item) => acc + (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1) * item.price,
-        0,
-      ),
-    [list],
+      list
+        .filter((item) => item.createdBy === user.displayName)
+        .reduce(
+          (acc, item) => acc + (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1) * item.price,
+          0,
+        ),
+    [list, user],
   );
 
   const onClose = useCallback(() => {
@@ -140,7 +142,7 @@ function Home() {
   return (
     <>
       <Header current={currentDate} total={total} onChange={setCurrentDate} />
-      <div className="flex-1 p-4">
+      <div className="flex-1 px-6 py-4">
         <RecordList
           user={user}
           list={list}
