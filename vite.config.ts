@@ -18,9 +18,9 @@ export default defineConfig({
       includeAssets: ['favicon.png', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
         name: 'Huei & Bei Money',
-        short_name: 'Huei & Bei ❤️❤️❤️',
-        description: 'cost record ',
-        theme_color: '#ffffff',
+        short_name: 'Huei & Bei',
+        description: 'Huei & Bei cost record ❤️❤️❤️',
+        theme_color: '#92A9BD',
         start_url: '/?standalone=true',
         orientation: 'portrait-primary',
         icons: [
