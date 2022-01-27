@@ -101,7 +101,7 @@ function FormDialog(props: FormDialogProps) {
       )}
       <AppBar className="py-1" position="sticky" color="secondary">
         <Toolbar>
-          <CloseIcon aria-hidden onClick={onClose} />
+          <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
           <p className="text-xl">{form ? 'Edit' : 'Create'} Record</p>
         </Toolbar>
       </AppBar>
