@@ -79,7 +79,7 @@ function Calculator(props: CalculatorProps) {
 
   return (
     <div className="w-80 h-full p-4 rounded bg-secondary">
-      <div className="w-full h-20 flex justify-center items-center mb-4 px-4 font-bold text-white bg-primary rounded">
+      <div className="w-full h-20 flex justify-center items-center mb-4 px-4 font-bold text-2xl text-white bg-primary rounded">
         {current}
       </div>
       <div className="w-full h-full grid grid-cols-4 grid-rows-5 gap-4">
