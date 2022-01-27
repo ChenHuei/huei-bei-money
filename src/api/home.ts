@@ -49,8 +49,13 @@ export const removeRecordApi = (db: Firestore, date: number | Date, id: string):
 /** category */
 export const getCategoryListApi = async (db: Firestore): Promise<Category[]> => {
   const snapshot = await getDocs(collection(db, 'category'));
-  return snapshot.docs.map((item) => ({
-    id: item.id,
-    ...item.data(),
-  })) as Category[];
+  return snapshot.docs
+    .map(
+      (item) =>
+        ({
+          id: item.id,
+          ...item.data(),
+        } as Category),
+    )
+    .sort((a, b) => a.sort - b.sort);
 };
