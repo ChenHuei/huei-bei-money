@@ -49,7 +49,7 @@ interface FormDialogProps {
 }
 
 function FormDialog(props: FormDialogProps) {
-  const { isOpen, form, categoryList, onConfirm, onDelete, onClose } = props;
+  const { isOpen, form, categoryList = [], onConfirm, onDelete, onClose } = props;
   const [open, setOpen] = useState(false);
   const [openDate, setOpenDate] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
