@@ -30,16 +30,19 @@ function Home() {
   const [form, setForm] = useState<RecordForm | undefined>(undefined);
   const [list, setList] = useState<Record[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
+  const [filterUser, setFilterUser] = useState<string[]>(
+    [user.displayName ?? ''].filter((item) => item !== ''),
+  );
 
   const total = useMemo(
     () =>
       list
-        .filter((item) => item.createdBy === user.displayName)
+        .filter((item) => filterUser.includes(item.createdBy))
         .reduce(
           (acc, item) => acc + (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1) * item.price,
           0,
         ),
-    [list, user],
+    [list, filterUser],
   );
 
   const onClose = useCallback(() => {
@@ -141,8 +144,14 @@ function Home() {
 
   return (
     <>
-      <Header current={currentDate} total={total} onChange={setCurrentDate} />
-      <div className="flex-1 p-4">
+      <Header
+        current={currentDate}
+        total={total}
+        filter={filterUser}
+        setFilter={setFilterUser}
+        onChange={setCurrentDate}
+      />
+      <div className="flex-1 p-4 pb-16">
         <RecordList
           user={user}
           list={list}
@@ -152,7 +161,7 @@ function Home() {
           }}
         />
       </div>
-      <div className="sticky bottom-0 right-0 flex justify-end p-4">
+      <div className="fixed bottom-14 right-0 flex justify-end p-4">
         <Fab color="primary" aria-label="add" onClick={() => setOpenFormDialog(true)}>
           <AddIcon />
         </Fab>
