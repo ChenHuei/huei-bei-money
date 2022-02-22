@@ -1,11 +1,20 @@
 import { User } from 'firebase/auth';
-import { INCOME_CATEGORY_ID } from '@/constants/home';
-import RecordDetail, { RecordDetailProps } from './RecordDetail';
+import { format } from 'date-fns';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-interface Record extends Omit<RecordDetailProps, 'isSelf' | 'isIncome' | 'onClick'> {
+import { INCOME_CATEGORY_ID } from '@/constants/home';
+import { formatCurrency } from '@/utils/currency';
+
+interface Record {
   id: string;
   categoryId: string;
   subCategoryId: string;
+  date: number;
+  categoryName: string;
+  subCategoryName: string;
+  price: number;
+  description: string;
+  createdBy: string;
 }
 
 interface RecordListProps {
@@ -20,13 +29,31 @@ function RecordList(props: RecordListProps) {
   return (
     <div>
       {list.map((item) => (
-        <RecordDetail
+        <div
           key={item.id}
-          {...item}
-          isSelf={user.displayName === item.createdBy}
-          isIncome={item.categoryId === INCOME_CATEGORY_ID}
-          onClick={() => onClick(item)}
-        />
+          className="flex items-center mb-4"
+          aria-hidden
+          onClick={() => user.displayName === item.createdBy && onClick(item)}
+        >
+          <div className="w-8 h-8 flex justify-center items-center bg-primary text-white rounded-lg">
+            <p>{item.categoryName}</p>
+          </div>
+          <div className="flex-1 mx-3">
+            <div className="flex">
+              <p>{format(new Date(item.date), 'MM/dd')}</p>
+              {user.displayName !== item.createdBy && (
+                <p className="flex items-center text-primaryDarker">
+                  <AccountCircleIcon className="ml-2 mr-1 text-sm" />
+                  {item.createdBy}
+                </p>
+              )}
+            </div>
+            <p>
+              {item.subCategoryName} {item.description}
+            </p>
+          </div>
+          <p>{formatCurrency(item.price * (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1))}</p>
+        </div>
       ))}
     </div>
   );
