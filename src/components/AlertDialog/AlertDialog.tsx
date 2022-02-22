@@ -1,15 +1,16 @@
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
 interface AlertDialogProps {
+  isOpen: boolean;
   title: string;
   onConfirm: () => void;
   onClose: () => void;
 }
 
 function AlertDialog(props: AlertDialogProps) {
-  const { title, onConfirm, onClose } = props;
+  const { isOpen, title, onConfirm, onClose } = props;
   return (
-    <Dialog open onClose={onClose}>
+    <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogActions>
         <Button onClick={onClose}>取消</Button>

@@ -27,9 +27,9 @@ import { USER_LIST } from '@/constants/home';
 import Transition from '@/components/Transition';
 import DateDialog from '@/components/DateDialog';
 import Calculator from '@/components/Calculator';
+import AlertDialog from '@/components/AlertDialog';
 
 import { Record } from '../RecordList';
-import AlertDialog from './AlertDialog';
 
 interface CategoryDetail {
   id: string;
@@ -100,13 +100,12 @@ function FormDialog(props: FormDialogProps) {
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose} TransitionComponent={Transition}>
-      {openAlert && (
-        <AlertDialog
-          title={`確定要刪除 ${format(getValues('date'), 'yyyy/MM/dd')} 這一筆紀錄嗎 ?`}
-          onConfirm={() => onDelete(getValues())}
-          onClose={() => setOpenAlert(false)}
-        />
-      )}
+      <AlertDialog
+        isOpen={openAlert}
+        title={`確定要刪除 ${format(getValues('date'), 'yyyy/MM/dd')} 這一筆紀錄嗎 ?`}
+        onConfirm={() => onDelete(getValues())}
+        onClose={() => setOpenAlert(false)}
+      />
       <AppBar className="py-1" position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
