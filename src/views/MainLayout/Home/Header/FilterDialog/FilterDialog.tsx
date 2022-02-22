@@ -13,9 +13,8 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-import Transition from '@/components/Transition';
-
 import { USER_LIST } from '@/constants/home';
+import Transition from '@/components/Transition';
 
 interface FilterDialogProps {
   open: boolean;
@@ -34,7 +33,7 @@ function FilterDialog(props: FilterDialogProps) {
 
   useEffect(() => {
     if (open) setInnerValue(value);
-  }, [open]);
+  }, [open, value]);
 
   return (
     <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>

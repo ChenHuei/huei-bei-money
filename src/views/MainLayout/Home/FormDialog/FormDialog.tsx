@@ -1,8 +1,8 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useState, useMemo, useEffect } from 'react';
-import { format } from 'date-fns';
 import { useForm, Controller } from 'react-hook-form';
+import { format } from 'date-fns';
 import {
   AppBar,
   Toolbar,
@@ -43,15 +43,13 @@ interface Category {
   subCategory: CategoryDetail[];
 }
 
-type RecordForm = Omit<Record, 'id'> & { id?: string };
-
 interface FormDialogProps {
   isOpen: boolean;
-  form?: RecordForm;
+  form?: Record;
   userName: string;
   categoryList: Category[];
-  onConfirm: (data: RecordForm) => void;
-  onDelete: (data: RecordForm) => void;
+  onConfirm: (data: Record) => void;
+  onDelete: (data: Record) => void;
   onClose: () => void;
 }
 
@@ -60,8 +58,9 @@ function FormDialog(props: FormDialogProps) {
   const [open, setOpen] = useState(false);
   const [openDate, setOpenDate] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<RecordForm>({
+  const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<Record>({
     defaultValues: {
+      id: '',
       date: new Date().getTime(),
       categoryId: '',
       subCategoryId: '',
@@ -84,7 +83,7 @@ function FormDialog(props: FormDialogProps) {
     if (currentCategory) {
       setValue('categoryName', currentCategory.name);
     }
-  }, [currentCategory]);
+  }, [currentCategory, setValue]);
 
   useEffect(() => {
     if (isOpen) {
@@ -92,11 +91,11 @@ function FormDialog(props: FormDialogProps) {
 
       if (form) {
         Object.entries(form).forEach(([key, value]) => {
-          setValue(key as keyof RecordForm, value);
+          setValue(key as keyof Record, value);
         });
       }
     }
-  }, [isOpen]);
+  }, [form, isOpen, reset, setValue]);
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose} TransitionComponent={Transition}>
@@ -109,7 +108,7 @@ function FormDialog(props: FormDialogProps) {
       <AppBar className="py-1" position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
-          <p className="text-xl">{form ? 'Edit' : 'Create'} Record</p>
+          <p className="text-xl">{form ? '編輯' : '新增'} 紀錄</p>
         </Toolbar>
       </AppBar>
       <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
@@ -309,4 +308,4 @@ function FormDialog(props: FormDialogProps) {
 }
 
 export default FormDialog;
-export type { FormDialogProps, Category, RecordForm };
+export type { FormDialogProps, Category };

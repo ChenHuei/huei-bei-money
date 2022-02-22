@@ -2,16 +2,15 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Firestore } from 'firebase/firestore/lite';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 import {
-  addRecordApi,
-  updateRecordApi,
+  addHomeRecordApi,
+  updateHomeRecordApi,
   getCategoryListApi,
-  getRecordApi,
-  removeRecordApi,
+  getHomeRecordApi,
+  removeHomeRecordApi,
 } from '@/api/home';
 import { differentInMonthOrYear } from '@/utils/date';
 import { useFirebase } from '@/hooks/useFirebase';
@@ -20,14 +19,14 @@ import { INCOME_CATEGORY_ID } from '@/constants/home';
 import { MainLayoutOutletProps } from '../MainLayout';
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
-import FormDialog, { Category, RecordForm } from './FormDialog';
+import FormDialog, { Category } from './FormDialog';
 
 function Home() {
   const firebase = useFirebase();
   const { setSnackbarState, setIsOpenLoading, user } = useOutletContext<MainLayoutOutletProps>();
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [form, setForm] = useState<RecordForm | undefined>(undefined);
+  const [form, setForm] = useState<Record | undefined>(undefined);
   const [list, setList] = useState<Record[]>([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [filterUser, setFilterUser] = useState<string[]>(
@@ -50,80 +49,93 @@ function Home() {
     setOpenFormDialog(false);
   }, []);
 
-  const init = useCallback(async (db: Firestore, date: number | Date) => {
-    try {
-      setIsOpenLoading(true);
+  const init = useCallback(
+    async (date: number | Date) => {
+      try {
+        onClose();
+        setIsOpenLoading(true);
 
-      await Promise.all([
-        getRecordApi(db, date),
-        ...(categoryList.length === 0 ? [getCategoryListApi(db)] : []),
-      ]).then(([data, categoryData]) => {
-        setList(data);
-        setCategoryList(categoryData);
-      });
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsOpenLoading(false);
-    }
-  }, []);
-
-  const onCreate = async (db: Firestore, data: RecordForm) => {
-    try {
-      setIsOpenLoading(true);
-
-      await addRecordApi(db, data);
-
-      setCurrentDate(new Date(data.date));
-      setSnackbarState({ open: true, message: '新增成功' });
-      onClose();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsOpenLoading(false);
-    }
-  };
-
-  const onUpdate = async (db: Firestore, data: RecordForm, originData: RecordForm) => {
-    try {
-      const { date: originDate, id } = originData;
-      setIsOpenLoading(true);
-
-      if (differentInMonthOrYear(originDate, data.date)) {
-        await Promise.all([removeRecordApi(db, originDate, id as string), addRecordApi(db, data)]);
-      } else {
-        await updateRecordApi(db, data);
+        await Promise.all([
+          getHomeRecordApi(firebase, date),
+          ...(categoryList.length === 0 ? [getCategoryListApi(firebase)] : []),
+        ]).then(([data, categoryData]) => {
+          setList(data);
+          setCategoryList(categoryData);
+        });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsOpenLoading(false);
       }
+    },
+    [categoryList.length, firebase, onClose, setIsOpenLoading],
+  );
 
-      setCurrentDate(new Date(data.date));
-      setSnackbarState({ open: true, message: '編輯成功' });
-      onClose();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsOpenLoading(false);
-    }
-  };
+  const onCreate = useCallback(
+    async (data: Record) => {
+      try {
+        setIsOpenLoading(true);
 
-  const onDelete = async (db: Firestore, data: RecordForm) => {
-    try {
-      const { date, id } = data;
-      setIsOpenLoading(true);
+        await addHomeRecordApi(firebase, data);
 
-      await removeRecordApi(db, date, id as string);
-      setSnackbarState({ open: true, message: '刪除成功' });
-      onClose();
-      init(db, date);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsOpenLoading(false);
-    }
-  };
+        setCurrentDate(new Date(data.date));
+        setSnackbarState({ open: true, message: '新增成功' });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsOpenLoading(false);
+      }
+    },
+    [firebase, setIsOpenLoading, setSnackbarState],
+  );
+
+  const onUpdate = useCallback(
+    async (data: Record, originData: Record) => {
+      try {
+        const { date: originDate, id } = originData;
+        setIsOpenLoading(true);
+
+        if (differentInMonthOrYear(originDate, data.date)) {
+          await Promise.all([
+            removeHomeRecordApi(firebase, originDate, id as string),
+            addHomeRecordApi(firebase, data),
+          ]);
+        } else {
+          await updateHomeRecordApi(firebase, data);
+        }
+
+        setCurrentDate(new Date(data.date));
+        setSnackbarState({ open: true, message: '編輯成功' });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsOpenLoading(false);
+      }
+    },
+    [firebase, setIsOpenLoading, setSnackbarState],
+  );
+
+  const onDelete = useCallback(
+    async (data: Record) => {
+      try {
+        const { date, id } = data;
+        setIsOpenLoading(true);
+
+        await removeHomeRecordApi(firebase, date, id as string);
+        setSnackbarState({ open: true, message: '刪除成功' });
+        await init(date);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsOpenLoading(false);
+      }
+    },
+    [firebase, init, setIsOpenLoading, setSnackbarState],
+  );
 
   useEffect(() => {
-    init(firebase, currentDate);
-  }, [currentDate]);
+    init(currentDate);
+  }, [currentDate, init]);
 
   return (
     <>
@@ -157,14 +169,12 @@ function Home() {
         categoryList={categoryList}
         onConfirm={(data) => {
           if (form) {
-            onUpdate(firebase, data, form);
+            onUpdate(data, form);
           } else {
-            onCreate(firebase, data);
+            onCreate(data);
           }
         }}
-        onDelete={(data) => {
-          onDelete(firebase, data);
-        }}
+        onDelete={onDelete}
         onClose={onClose}
       />
     </>

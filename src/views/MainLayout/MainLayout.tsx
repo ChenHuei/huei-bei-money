@@ -34,7 +34,7 @@ function MainLayout() {
     return () => {
       unlisten();
     };
-  }, [auth]);
+  }, [auth, navigate]);
 
   useEffect(() => {
     const index = TABS_LIST.findIndex((item) => item.to === location.pathname);
