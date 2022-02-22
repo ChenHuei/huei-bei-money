@@ -38,7 +38,7 @@ export const addRecordApi = (
 
 export const updateRecordApi = (db: Firestore, data: RecordForm): Promise<void> => {
   const { id, ...other } = data;
-  return updateDoc(doc(db, 'history', format(data.date, 'yyyyMM'), 'record', data.id as string), {
+  return updateDoc(doc(db, 'history', format(data.date, 'yyyyMM'), 'record', id as string), {
     ...other,
   });
 };
