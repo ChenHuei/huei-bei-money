@@ -14,9 +14,9 @@ import {
   removeRecordApi,
 } from '@/api/home';
 import { differentInMonthOrYear } from '@/utils/date';
-
 import { useFirebase } from '@/hooks/useFirebase';
 import { INCOME_CATEGORY_ID } from '@/constants/home';
+
 import { MainLayoutOutletProps } from '../MainLayout';
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
@@ -68,17 +68,13 @@ function Home() {
     }
   }, []);
 
-  const onCreate = async (db: Firestore, data: RecordForm, userName: string) => {
+  const onCreate = async (db: Firestore, data: RecordForm) => {
     try {
-      const { date } = data;
       setIsOpenLoading(true);
 
-      await addRecordApi(db, {
-        ...data,
-        createdBy: userName,
-      });
+      await addRecordApi(db, data);
 
-      setCurrentDate(new Date(date));
+      setCurrentDate(new Date(data.date));
       setSnackbarState({ open: true, message: '新增成功' });
       onClose();
     } catch (e) {
@@ -88,31 +84,18 @@ function Home() {
     }
   };
 
-  const onUpdate = async (
-    db: Firestore,
-    data: RecordForm,
-    originData: RecordForm,
-    userName: string,
-  ) => {
+  const onUpdate = async (db: Firestore, data: RecordForm, originData: RecordForm) => {
     try {
       const { date: originDate, id } = originData;
-      const { date } = data;
-      const request = {
-        ...data,
-        createdBy: userName,
-      };
       setIsOpenLoading(true);
 
-      if (differentInMonthOrYear(originDate, date)) {
-        await Promise.all([
-          removeRecordApi(db, originDate, id as string),
-          addRecordApi(db, request),
-        ]);
+      if (differentInMonthOrYear(originDate, data.date)) {
+        await Promise.all([removeRecordApi(db, originDate, id as string), addRecordApi(db, data)]);
       } else {
-        await updateRecordApi(db, request);
+        await updateRecordApi(db, data);
       }
 
-      setCurrentDate(new Date(date));
+      setCurrentDate(new Date(data.date));
       setSnackbarState({ open: true, message: '編輯成功' });
       onClose();
     } catch (e) {
@@ -170,13 +153,13 @@ function Home() {
       <FormDialog
         isOpen={openFormDialog}
         form={form}
+        userName={user.displayName ?? ''}
         categoryList={categoryList}
         onConfirm={(data) => {
-          const userName = user.displayName ?? '';
           if (form) {
-            onUpdate(firebase, data, form, userName);
+            onUpdate(firebase, data, form);
           } else {
-            onCreate(firebase, data, userName);
+            onCreate(firebase, data);
           }
         }}
         onDelete={(data) => {

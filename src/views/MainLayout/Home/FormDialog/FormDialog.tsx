@@ -15,15 +15,21 @@ import {
   OutlinedInput,
   TextField,
   Stack,
+  FormLabel,
+  Radio,
+  FormControlLabel,
+  RadioGroup,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import EventIcon from '@mui/icons-material/Event';
 
+import { USER_LIST } from '@/constants/home';
 import Transition from '@/components/Transition';
 import DateDialog from '@/components/DateDialog';
+
+import { Record } from '../RecordList';
 import AlertDialog from './AlertDialog';
 import Calculator from './Calculator';
-import { Record } from '../RecordList';
 
 interface CategoryDetail {
   id: string;
@@ -42,6 +48,7 @@ type RecordForm = Omit<Record, 'id'> & { id?: string };
 interface FormDialogProps {
   isOpen: boolean;
   form?: RecordForm;
+  userName: string;
   categoryList: Category[];
   onConfirm: (data: RecordForm) => void;
   onDelete: (data: RecordForm) => void;
@@ -49,7 +56,7 @@ interface FormDialogProps {
 }
 
 function FormDialog(props: FormDialogProps) {
-  const { isOpen, form, categoryList = [], onConfirm, onDelete, onClose } = props;
+  const { isOpen, form, userName, categoryList = [], onConfirm, onDelete, onClose } = props;
   const [open, setOpen] = useState(false);
   const [openDate, setOpenDate] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
@@ -62,6 +69,7 @@ function FormDialog(props: FormDialogProps) {
       subCategoryName: '',
       price: 0,
       description: '',
+      createdBy: userName,
     },
   });
 
@@ -255,6 +263,28 @@ function FormDialog(props: FormDialogProps) {
                   setValue('description', e.target.value)
                 }
               />
+            )}
+          />
+          <Controller
+            name="createdBy"
+            control={control}
+            rules={{ required: '請輸入使用者' }}
+            render={({ field: { value }, fieldState: { error } }) => (
+              <FormControl error={!!error} margin="normal" fullWidth>
+                <FormLabel id="createdBy">使用者</FormLabel>
+                <RadioGroup
+                  name="createdBy"
+                  value={value}
+                  row
+                  onChange={(e) => {
+                    setValue('createdBy', e.target.value);
+                  }}
+                >
+                  {USER_LIST.map((user) => (
+                    <FormControlLabel key={user} value={user} control={<Radio />} label={user} />
+                  ))}
+                </RadioGroup>
+              </FormControl>
             )}
           />
         </div>
