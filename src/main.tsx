@@ -9,6 +9,7 @@ import Login from './views/Login';
 import MainLayout from './views/MainLayout';
 import Home from './views/MainLayout/Home';
 import User from './views/MainLayout/User';
+import Family from './views/MainLayout/Family';
 
 const updateSW = registerSW({
   onNeedRefresh() {},
@@ -23,6 +24,7 @@ ReactDOM.render(
           <Route path="home" element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path="user" element={<User />} />
+            <Route path="family" element={<Family />} />
           </Route>
           <Route path="login" element={<Login />} />
           <Route index element={<Navigate to="/home" />} />

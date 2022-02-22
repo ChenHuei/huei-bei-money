@@ -5,6 +5,7 @@ import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 
 import { AppOutletProps } from '@/App';
 
@@ -49,11 +50,17 @@ function MainLayout() {
           setTab(newValue);
         }}
       >
-        <BottomNavigationAction component={Link} to="/home" label="Home" icon={<HomeIcon />} />
+        <BottomNavigationAction component={Link} to="/home" label="首頁" icon={<HomeIcon />} />
+        <BottomNavigationAction
+          component={Link}
+          to="/home/family"
+          label="家庭基金"
+          icon={<FamilyRestroomIcon />}
+        />
         <BottomNavigationAction
           component={Link}
           to="/home/user"
-          label="User"
+          label="帳戶"
           icon={<PersonIcon />}
         />
       </BottomNavigation>
