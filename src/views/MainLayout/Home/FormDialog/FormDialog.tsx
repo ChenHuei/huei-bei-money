@@ -26,10 +26,10 @@ import EventIcon from '@mui/icons-material/Event';
 import { USER_LIST } from '@/constants/home';
 import Transition from '@/components/Transition';
 import DateDialog from '@/components/DateDialog';
+import Calculator from '@/components/Calculator';
 
 import { Record } from '../RecordList';
 import AlertDialog from './AlertDialog';
-import Calculator from './Calculator';
 
 interface CategoryDetail {
   id: string;
