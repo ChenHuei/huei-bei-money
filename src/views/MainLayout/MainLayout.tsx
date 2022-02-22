@@ -1,13 +1,11 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useEffect, useState, useRef } from 'react';
-import { Link, Outlet, useNavigate, useOutletContext } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import PersonIcon from '@mui/icons-material/Person';
-import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 
 import { AppOutletProps } from '@/App';
+import { TABS_LIST } from '@/constants/mainLayout';
 
 interface MainLayoutOutletProps extends AppOutletProps {
   user: User;
@@ -15,6 +13,7 @@ interface MainLayoutOutletProps extends AppOutletProps {
 
 function MainLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const userRef = useRef<User | null>(null);
   const { setSnackbarState, setIsOpenLoading } = useOutletContext<AppOutletProps>();
   const [isAuth, setIsAuth] = useState(false);
@@ -37,6 +36,14 @@ function MainLayout() {
     };
   }, [auth]);
 
+  useEffect(() => {
+    const index = TABS_LIST.findIndex((item) => item.to === location.pathname);
+
+    if (index > -1) {
+      setTab(index);
+    }
+  }, [location]);
+
   return isAuth ? (
     <>
       <main className="relative flex flex-col min-w-full min-h-[calc(100vh-56px)] bg-primaryLighter">
@@ -50,19 +57,9 @@ function MainLayout() {
           setTab(newValue);
         }}
       >
-        <BottomNavigationAction component={Link} to="/home" label="首頁" icon={<HomeIcon />} />
-        <BottomNavigationAction
-          component={Link}
-          to="/home/family"
-          label="家庭基金"
-          icon={<FamilyRestroomIcon />}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to="/home/user"
-          label="帳戶"
-          icon={<PersonIcon />}
-        />
+        {TABS_LIST.map((item) => (
+          <BottomNavigationAction key={item.to} {...item} component={Link} />
+        ))}
       </BottomNavigation>
     </>
   ) : (
