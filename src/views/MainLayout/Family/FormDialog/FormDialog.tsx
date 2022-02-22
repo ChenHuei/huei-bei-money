@@ -149,9 +149,6 @@ function FormDialog(props: FormDialogProps) {
           <Controller
             name="huei"
             control={control}
-            rules={{
-              validate: () => Number(getValues('huei')) !== 0,
-            }}
             render={({ field: { value }, fieldState: { error } }) => (
               <FormControl
                 error={!!error}
@@ -180,9 +177,6 @@ function FormDialog(props: FormDialogProps) {
           <Controller
             name="bei"
             control={control}
-            rules={{
-              validate: () => Number(getValues('bei')) !== 0,
-            }}
             render={({ field: { value }, fieldState: { error } }) => (
               <FormControl
                 error={!!error}

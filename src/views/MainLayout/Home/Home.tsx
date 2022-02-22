@@ -57,7 +57,7 @@ function Home() {
 
         await Promise.all([
           getHomeRecordApi(firebase, date),
-          ...(categoryList.length === 0 ? [getCategoryListApi(firebase)] : []),
+          ...(categoryList && categoryList.length === 0 ? [getCategoryListApi(firebase)] : []),
         ]).then(([data, categoryData]) => {
           setList(data);
           setCategoryList(categoryData);
@@ -68,7 +68,7 @@ function Home() {
         setIsOpenLoading(false);
       }
     },
-    [categoryList.length, firebase, onClose, setIsOpenLoading],
+    [categoryList, firebase, onClose, setIsOpenLoading],
   );
 
   const onCreate = useCallback(

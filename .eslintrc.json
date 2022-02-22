@@ -42,6 +42,7 @@
     ],
     "no-restricted-exports": "off",
     "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react/jsx-props-no-spreading": "off",
     "react-hooks/exhaustive-deps": "error"
