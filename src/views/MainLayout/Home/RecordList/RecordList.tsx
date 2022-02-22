@@ -28,33 +28,48 @@ function RecordList(props: RecordListProps) {
 
   return (
     <div>
-      {list.map((item) => (
-        <div
-          key={item.id}
-          className="flex items-center mb-4"
-          aria-hidden
-          onClick={() => user.displayName === item.createdBy && onClick(item)}
-        >
-          <div className="w-8 h-8 flex justify-center items-center bg-primary text-white rounded-lg">
-            <p>{item.categoryName}</p>
-          </div>
-          <div className="flex-1 mx-3">
-            <div className="flex">
-              <p>{format(new Date(item.date), 'MM/dd')}</p>
-              {user.displayName !== item.createdBy && (
-                <p className="flex items-center text-primaryDarker">
-                  <AccountCircleIcon className="ml-2 mr-1 text-sm" />
-                  {item.createdBy}
-                </p>
-              )}
+      {list.map((item) => {
+        const {
+          id,
+          categoryName,
+          date,
+          createdBy,
+          subCategoryName,
+          description,
+          price,
+          categoryId,
+        } = item;
+        const isSelf = user.displayName === item.createdBy;
+        const isIncome = categoryId === INCOME_CATEGORY_ID;
+
+        return (
+          <div
+            key={id}
+            className="flex items-center mb-4"
+            aria-hidden
+            onClick={() => isSelf && onClick(item)}
+          >
+            <div className="w-8 h-8 flex justify-center items-center bg-primary text-white rounded-lg">
+              <p>{categoryName}</p>
             </div>
-            <p>
-              {item.subCategoryName} {item.description}
-            </p>
+            <div className="flex-1 mx-3">
+              <div className="flex">
+                <p>{format(new Date(date), 'MM/dd')}</p>
+                {isSelf === false && (
+                  <p className="flex items-center text-primaryDarker">
+                    <AccountCircleIcon className="ml-2 mr-1 text-sm" />
+                    {createdBy}
+                  </p>
+                )}
+              </div>
+              <p>
+                {subCategoryName} {description}
+              </p>
+            </div>
+            <p>{formatCurrency(price * (isIncome ? 1 : -1))}</p>
           </div>
-          <p>{formatCurrency(item.price * (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1))}</p>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
