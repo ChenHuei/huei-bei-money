@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import SavingsIcon from '@mui/icons-material/Savings';
 
-import { formatCurrency } from '@/utils/currency';
 import { useFirebase } from '@/hooks/useFirebase';
 import {
   addFamilyRecordApi,
@@ -12,11 +10,11 @@ import {
   removeFamilyRecordApi,
   updateFamilyRecordApi,
 } from '@/api/family';
-import { FamilyCategory } from '@/constants/family';
 
 import { MainLayoutOutletProps } from '../MainLayout';
 import RecordList, { FamilyRecord } from './RecordList';
 import FormDialog from './FormDialog';
+import Header from './Header';
 
 function Family() {
   const firebase = useFirebase();
@@ -24,16 +22,6 @@ function Family() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [form, setForm] = useState<FamilyRecord | undefined>(undefined);
   const [list, setList] = useState<FamilyRecord[]>([]);
-
-  const total = useMemo(
-    () =>
-      list.reduce(
-        (acc, item) =>
-          acc + (item.huei + item.bei) * (item.type === FamilyCategory.savings ? 1 : -1),
-        0,
-      ),
-    [list],
-  );
 
   const onClose = useCallback(() => {
     setForm(undefined);
@@ -98,12 +86,7 @@ function Family() {
 
   return (
     <>
-      <header className="flex justify-center items-end p-4 pt-6 bg-primaryDarker">
-        <div className="flex flex-col items-center text-white">
-          <SavingsIcon />
-          <span>{formatCurrency(total)}</span>
-        </div>
-      </header>
+      <Header list={list} />
       <div className="flex-1 p-4 pb-16">
         <RecordList
           list={list}
