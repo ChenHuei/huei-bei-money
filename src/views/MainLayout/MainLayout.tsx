@@ -2,22 +2,31 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { Firestore } from 'firebase/firestore/lite';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 
 import { AppOutletProps } from '@/App';
 import { TABS_LIST } from '@/constants/mainLayout';
+import { getCategoryListApi } from '@/api/home';
+import { useFirebase } from '@/hooks/useFirebase';
+
+import { Category } from './Home/FormDialog';
 
 interface MainLayoutOutletProps extends AppOutletProps {
   user: User;
+  firebase: Firestore;
+  categoryList: Category[];
 }
 
 function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const firebase = useFirebase();
   const userRef = useRef<User | null>(null);
   const { setSnackbarState, setIsOpenLoading } = useOutletContext<AppOutletProps>();
   const [isAuth, setIsAuth] = useState(false);
   const [tab, setTab] = useState(0);
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   const auth = getAuth();
 
@@ -44,10 +53,25 @@ function MainLayout() {
     }
   }, [location]);
 
+  useEffect(() => {
+    (async () => {
+      const data = await getCategoryListApi(firebase);
+      setCategoryList(data);
+    })();
+  }, [firebase]);
+
   return isAuth ? (
     <>
       <main className="relative flex flex-col min-w-full min-h-[calc(100vh-56px)] bg-primaryLighter">
-        <Outlet context={{ setSnackbarState, setIsOpenLoading, user: userRef.current }} />
+        <Outlet
+          context={{
+            setSnackbarState,
+            setIsOpenLoading,
+            categoryList,
+            firebase,
+            user: userRef.current,
+          }}
+        />
       </main>
       <BottomNavigation
         className="sticky bottom-0 right-0"

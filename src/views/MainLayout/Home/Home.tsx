@@ -8,27 +8,24 @@ import AddIcon from '@mui/icons-material/Add';
 import {
   addHomeRecordApi,
   updateHomeRecordApi,
-  getCategoryListApi,
   getHomeRecordApi,
   removeHomeRecordApi,
 } from '@/api/home';
 import { differentInMonthOrYear } from '@/utils/date';
-import { useFirebase } from '@/hooks/useFirebase';
 import { INCOME_CATEGORY_ID } from '@/constants/home';
 
 import { MainLayoutOutletProps } from '../MainLayout';
 import Header from './Header';
 import RecordList, { Record } from './RecordList';
-import FormDialog, { Category } from './FormDialog';
+import FormDialog from './FormDialog';
 
 function Home() {
-  const firebase = useFirebase();
-  const { setSnackbarState, setIsOpenLoading, user } = useOutletContext<MainLayoutOutletProps>();
+  const { setSnackbarState, setIsOpenLoading, user, categoryList, firebase } =
+    useOutletContext<MainLayoutOutletProps>();
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [form, setForm] = useState<Record | undefined>(undefined);
   const [list, setList] = useState<Record[]>([]);
-  const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [filterUser, setFilterUser] = useState<string[]>(
     [user.displayName ?? ''].filter((item) => item !== ''),
   );
@@ -54,21 +51,15 @@ function Home() {
       try {
         onClose();
         setIsOpenLoading(true);
-
-        await Promise.all([
-          getHomeRecordApi(firebase, date),
-          ...(categoryList && categoryList.length === 0 ? [getCategoryListApi(firebase)] : []),
-        ]).then(([data, categoryData]) => {
-          setList(data);
-          setCategoryList(categoryData);
-        });
+        const data = await getHomeRecordApi(firebase, date);
+        setList(data);
       } catch (e) {
         console.error(e);
       } finally {
         setIsOpenLoading(false);
       }
     },
-    [categoryList, firebase, onClose, setIsOpenLoading],
+    [firebase, onClose, setIsOpenLoading],
   );
 
   const onCreate = useCallback(

@@ -3,7 +3,6 @@ import { useOutletContext } from 'react-router-dom';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
-import { useFirebase } from '@/hooks/useFirebase';
 import {
   addFamilyRecordApi,
   getFamilyRecordApi,
@@ -17,8 +16,8 @@ import FormDialog from './FormDialog';
 import Header from './Header';
 
 function Family() {
-  const firebase = useFirebase();
-  const { setSnackbarState, setIsOpenLoading } = useOutletContext<MainLayoutOutletProps>();
+  const { setSnackbarState, setIsOpenLoading, firebase } =
+    useOutletContext<MainLayoutOutletProps>();
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [form, setForm] = useState<FamilyRecord | undefined>(undefined);
   const [list, setList] = useState<FamilyRecord[]>([]);
