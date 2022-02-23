@@ -1,4 +1,5 @@
-import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { PropsWithChildren } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 interface AlertDialogProps {
   isOpen: boolean;
@@ -7,11 +8,12 @@ interface AlertDialogProps {
   onClose: () => void;
 }
 
-function AlertDialog(props: AlertDialogProps) {
-  const { isOpen, title, onConfirm, onClose } = props;
+function AlertDialog(props: PropsWithChildren<AlertDialogProps>) {
+  const { isOpen, title, children, onConfirm, onClose } = props;
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} fullWidth maxWidth="md" onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
+      <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button onClick={onClose}>取消</Button>
         <Button
