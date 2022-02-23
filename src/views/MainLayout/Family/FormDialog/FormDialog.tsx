@@ -16,11 +16,13 @@ import {
   Toolbar,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import EventIcon from '@mui/icons-material/Event';
 
 import { CATEGORY_LIST, FamilyCategory } from '@/constants/family';
 import AlertDialog from '@/components/AlertDialog';
 import Calculator from '@/components/Calculator';
 import Transition from '@/components/Transition';
+import DateDialog from '@/components/DateDialog';
 
 import { FamilyRecord } from '../RecordList';
 
@@ -40,6 +42,7 @@ interface FormDialogProps {
 
 function FormDialog(props: FormDialogProps) {
   const { isOpen, form, onConfirm, onDelete, onClose } = props;
+  const [openDate, setOpenDate] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [calculator, setCalculator] = useState<FamilyCalculator>({
     open: false,
@@ -49,6 +52,7 @@ function FormDialog(props: FormDialogProps) {
   const { control, handleSubmit, reset, getValues, setValue } = useForm<FamilyRecord>({
     defaultValues: {
       id: '',
+      date: new Date().getTime(),
       type: '',
       title: '',
       huei: 0,
@@ -98,6 +102,48 @@ function FormDialog(props: FormDialogProps) {
       <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
         <div className="flex-1">
           <Controller
+            name="date"
+            control={control}
+            rules={{ required: '請輸入日期' }}
+            render={({ field: { value }, fieldState: { error } }) => (
+              <>
+                {openDate && (
+                  <DateDialog
+                    value={new Date(value)}
+                    views={['year', 'month', 'day']}
+                    onClose={() => setOpenDate(false)}
+                    onChange={(e) => {
+                      const date = e.getTime();
+                      setValue('date', date);
+                      setValue(
+                        'title',
+                        getValues('type') === FamilyCategory.savings ? format(date, 'yyyy/MM') : '',
+                      );
+                    }}
+                  />
+                )}
+                <FormControl
+                  error={!!error}
+                  margin="normal"
+                  fullWidth
+                  onClick={() => setOpenDate(true)}
+                >
+                  <InputLabel htmlFor="date">日期</InputLabel>
+                  <OutlinedInput
+                    id="date"
+                    label="date"
+                    value={format(new Date(value), 'yyyy/MM/dd')}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <EventIcon />
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </>
+            )}
+          />
+          <Controller
             name="type"
             control={control}
             rules={{ required: '請輸入類別' }}
@@ -116,7 +162,7 @@ function FormDialog(props: FormDialogProps) {
                   setValue('type', val as FamilyCategory);
                   setValue(
                     'title',
-                    val === FamilyCategory.savings ? format(new Date(), 'yyyy/MM') : '',
+                    val === FamilyCategory.savings ? format(getValues('date'), 'yyyy/MM') : '',
                   );
                 }}
               >

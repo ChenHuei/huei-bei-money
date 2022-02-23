@@ -3,6 +3,7 @@ import { formatCurrency } from '@/utils/currency';
 
 interface FamilyRecord {
   id: string;
+  date: number;
   title: string;
   type: FamilyCategory | '';
   huei: number;

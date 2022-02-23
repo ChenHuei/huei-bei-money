@@ -14,13 +14,15 @@ import { FamilyRecord } from '@/views/MainLayout/Family/RecordList';
 
 export const getFamilyRecordApi = async (db: Firestore): Promise<FamilyRecord[]> => {
   const snapshot = await getDocs(collection(db, 'family'));
-  return snapshot.docs.map(
-    (item) =>
-      ({
-        id: item.id,
-        ...item.data(),
-      } as FamilyRecord),
-  );
+  return snapshot.docs
+    .map(
+      (item) =>
+        ({
+          id: item.id,
+          ...item.data(),
+        } as FamilyRecord),
+    )
+    .sort((a, b) => b.date - a.date);
 };
 
 export const addFamilyRecordApi = (
