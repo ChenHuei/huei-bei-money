@@ -34,7 +34,8 @@ function RecordList(props: RecordListProps) {
           <div className="flex-1 mx-3">{item.title}</div>
           <p>
             {formatCurrency(
-              (item.huei + item.bei) * (item.type === FamilyCategory.savings ? 1 : -1),
+              (item.huei + item.bei + item.family) *
+                (item.type === FamilyCategory.savings ? 1 : -1),
             )}
           </p>
         </div>
