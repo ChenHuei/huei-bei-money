@@ -31,14 +31,12 @@ function Header(props: HeaderProps) {
   const getUserAmount = useCallback(
     (user: 'huei' | 'bei') =>
       list
+        .filter((item) => item[user] !== 0)
         .reverse()
-        .reduce(
-          (acc, item) =>
-            acc.length > 1 || item.type === FamilyCategory.expend ? [...acc, item] : [],
-          [] as FamilyRecord[],
-        )
-        .map((item) => item[user] * (item.type === FamilyCategory.savings ? 1 : -1))
-        .reduce((acc, item) => acc + item, 0),
+        .reduce((acc, item) => {
+          const amount = item[user] * (item.type === FamilyCategory.savings ? 1 : -1);
+          return acc + amount > 0 ? 0 : acc + amount;
+        }, 0),
     [list],
   );
 
