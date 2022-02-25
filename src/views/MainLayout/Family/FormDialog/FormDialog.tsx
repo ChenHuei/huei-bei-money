@@ -28,7 +28,7 @@ import { FamilyRecord } from '../RecordList';
 
 interface FamilyCalculator {
   open: boolean;
-  target: '' | 'huei' | 'bei';
+  target: '' | 'huei' | 'bei' | 'family';
   price: number;
 }
 
@@ -57,6 +57,7 @@ function FormDialog(props: FormDialogProps) {
       title: '',
       huei: 0,
       bei: 0,
+      family: 0,
     },
   });
 
@@ -244,6 +245,34 @@ function FormDialog(props: FormDialogProps) {
                   value={value}
                   startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   onChange={(e) => setValue('bei', parseInt(e.target.value, 10))}
+                />
+              </FormControl>
+            )}
+          />
+          <Controller
+            name="family"
+            control={control}
+            render={({ field: { value }, fieldState: { error } }) => (
+              <FormControl
+                error={!!error}
+                margin="normal"
+                fullWidth
+                onClick={() =>
+                  setCalculator({
+                    open: true,
+                    target: 'family',
+                    price: value,
+                  })
+                }
+              >
+                <InputLabel htmlFor="family">Family 金額</InputLabel>
+                <OutlinedInput
+                  id="family"
+                  label="Family 金額"
+                  type="number"
+                  value={value}
+                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                  onChange={(e) => setValue('family', parseInt(e.target.value, 10))}
                 />
               </FormControl>
             )}

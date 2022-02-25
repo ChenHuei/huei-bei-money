@@ -8,6 +8,7 @@ interface FamilyRecord {
   type: FamilyCategory | '';
   huei: number;
   bei: number;
+  family: number;
 }
 
 interface RecordListProps {

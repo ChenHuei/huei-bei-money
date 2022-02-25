@@ -21,7 +21,8 @@ function Header(props: HeaderProps) {
     () =>
       list.reduce(
         (acc, item) =>
-          acc + (item.huei + item.bei) * (item.type === FamilyCategory.savings ? 1 : -1),
+          acc +
+          (item.huei + item.bei + item.family) * (item.type === FamilyCategory.savings ? 1 : -1),
         0,
       ),
     [list],

@@ -28,8 +28,8 @@ function DateDialog(props: DateDialogProps) {
           displayStaticWrapperAs="mobile"
           views={views}
           openTo={views[views.length - 1]}
-          minDate={new Date(2021, 1, 1)}
-          maxDate={new Date(2031, 1, 1)}
+          minDate={new Date(2019, 12, 1)}
+          maxDate={new Date(2031, 11, 31)}
           value={innerValue}
           onChange={setInnerValue}
           renderInput={() => <></>}
