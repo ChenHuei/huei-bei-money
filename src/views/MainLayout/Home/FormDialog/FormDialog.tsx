@@ -108,7 +108,7 @@ function FormDialog(props: FormDialogProps) {
       <AppBar className="py-1" position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
-          <p className="text-xl">{form ? '編輯' : '新增'} 紀錄</p>
+          <p className="text-xl">{form ? '編輯' : '新增'}紀錄</p>
         </Toolbar>
       </AppBar>
       <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
