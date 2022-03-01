@@ -44,6 +44,7 @@ function Header(props: HeaderProps) {
     <>
       <AlertDialog
         isOpen={openDetailDialog}
+        isDisplayCancel={false}
         title="預先支出明細"
         onClose={() => setOpenDetailDialog(false)}
         onConfirm={() => setOpenDetailDialog(false)}

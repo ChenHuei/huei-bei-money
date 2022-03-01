@@ -3,19 +3,20 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/
 
 interface AlertDialogProps {
   isOpen: boolean;
+  isDisplayCancel?: boolean;
   title: string;
   onConfirm: () => void;
   onClose: () => void;
 }
 
 function AlertDialog(props: PropsWithChildren<AlertDialogProps>) {
-  const { isOpen, title, children, onConfirm, onClose } = props;
+  const { isOpen, isDisplayCancel = true, title, children, onConfirm, onClose } = props;
   return (
     <Dialog open={isOpen} fullWidth maxWidth="md" onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>取消</Button>
+        {isDisplayCancel && <Button onClick={onClose}>取消</Button>}
         <Button
           onClick={() => {
             onConfirm();
