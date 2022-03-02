@@ -113,15 +113,16 @@ function Home() {
         setIsOpenLoading(true);
 
         await removeHomeRecordApi(firebase, date, id as string);
+
+        setCurrentDate(new Date(date));
         setSnackbarState({ open: true, message: '刪除成功' });
-        await init(date);
       } catch (e) {
         console.error(e);
       } finally {
         setIsOpenLoading(false);
       }
     },
-    [firebase, init, setIsOpenLoading, setSnackbarState],
+    [firebase, setIsOpenLoading, setSnackbarState],
   );
 
   useEffect(() => {
