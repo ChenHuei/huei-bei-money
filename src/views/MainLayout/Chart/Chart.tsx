@@ -11,8 +11,8 @@ import { getHomeRecordApi } from '@/api/home';
 import { Record } from '@/views/MainLayout/Home/RecordList';
 import { differentInMonthOrYear } from '@/utils/date';
 import { formatCurrency } from '@/utils/currency';
-
 import { CATEGORY_COLOR } from '@/constants/color';
+
 import { MainLayoutOutletProps } from '../MainLayout';
 import FormDialog from './FormDialog';
 import Circle from '../Home/Header/Circle';
@@ -74,7 +74,7 @@ function Chart() {
           labels: [],
           datasets: [
             {
-              label: 'Cost Chart',
+              label: '花費統計',
               data: [],
               backgroundColor: [],
               hoverOffset: 4,
@@ -116,7 +116,7 @@ function Chart() {
       </header>
       <div className="p-4 pt-8">
         {list.length === 0 ? (
-          <div className="flex flex-1 justify-center items-center text-3xl text-white">empty</div>
+          <div className="flex flex-1 justify-center items-center text-3xl text-white">空的</div>
         ) : (
           <Doughnut
             data={data}

@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
-import { createContext, PropsWithChildren, useMemo } from "react";
-import { initializeApp } from "firebase/app";
-import { Firestore, getFirestore } from "firebase/firestore/lite";
+import { createContext, PropsWithChildren, useMemo } from 'react';
+import { initializeApp } from 'firebase/app';
+import { Firestore, getFirestore } from 'firebase/firestore/lite';
 
 const FirebaseContext = createContext<Firestore | null>(null);
 
@@ -16,13 +16,9 @@ export default function FirebaseProvider(props: PropsWithChildren<{}>) {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
   });
 
-  const firebase = useMemo(() => getFirestore(app), []);
+  const firebase = useMemo(() => getFirestore(app), [app]);
 
-  return (
-    <FirebaseContext.Provider value={firebase}>
-      {props.children}
-    </FirebaseContext.Provider>
-  );
+  return <FirebaseContext.Provider value={firebase}>{props.children}</FirebaseContext.Provider>;
 }
 
 export { FirebaseContext };
