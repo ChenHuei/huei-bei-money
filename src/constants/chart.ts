@@ -1,8 +1,7 @@
-import { DateRange } from '@mui/lab';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 export interface ChartForm {
-  date: DateRange<Date>;
+  date: [Date, Date];
 }
 
 export const DEFAULT_FORM: ChartForm = {

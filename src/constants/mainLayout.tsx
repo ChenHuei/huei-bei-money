@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import HomeIcon from '@mui/icons-material/Home';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import PersonIcon from '@mui/icons-material/Person';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 
@@ -15,6 +16,11 @@ export const TABS_LIST: Tab[] = [
     to: '/home',
     label: '首頁',
     icon: <HomeIcon />,
+  },
+  {
+    to: '/home/chart',
+    label: '圖表',
+    icon: <BarChartIcon />,
   },
   {
     to: '/home/family',
