@@ -64,7 +64,10 @@ function FormDialog(props: FormDialogProps) {
                     value={value}
                     onClose={() => setOpenDate(false)}
                     onChange={(e) => {
-                      setValue('date', e);
+                      const [start, end] = e;
+                      if (start !== null && end !== null) {
+                        setValue('date', [start, end]);
+                      }
                     }}
                   />
                 )}

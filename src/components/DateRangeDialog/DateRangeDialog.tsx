@@ -1,21 +1,18 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useEffect, useState } from 'react';
 import { Dialog, Button } from '@mui/material';
-import { LocalizationProvider, StaticDateRangePicker } from '@mui/lab';
+import { DateRange, LocalizationProvider, StaticDateRangePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
-import { ChartForm } from '@/constants/chart';
-import { PickObj } from '@/utils/interface';
-
 interface DateDialogProps {
-  value: PickObj<ChartForm, 'date'>;
+  value: DateRange<Date>;
   onClose: () => void;
-  onChange: (date: PickObj<ChartForm, 'date'>) => void;
+  onChange: (date: DateRange<Date>) => void;
 }
 
 function DateRangeDialog(props: DateDialogProps) {
   const { value, onClose, onChange } = props;
-  const [innerValue, setInnerValue] = useState<PickObj<ChartForm, 'date'>>(value);
+  const [innerValue, setInnerValue] = useState<DateRange<Date>>(value);
 
   useEffect(() => {
     setInnerValue(value);
