@@ -238,7 +238,7 @@ function FormDialog(props: FormDialogProps) {
                   <OutlinedInput
                     id="price"
                     label="price"
-                    inputProps={{ type: 'number' }}
+                    type="numeric"
                     value={value}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     onChange={(e) => setValue('price', parseInt(e.target.value, 10))}
