@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { addMonths, differenceInMonths, format } from 'date-fns';
+import { addMonths, differenceInMonths, format, isAfter, isBefore } from 'date-fns';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -47,8 +47,12 @@ function Chart() {
             ),
           )
         : await getHomeRecordApi(firebase, startDate);
-
-      setList(recordList.flat().filter((item) => item.createdBy === user.displayName));
+      setList(
+        recordList
+          .flat()
+          .filter((item) => item.createdBy === user.displayName)
+          .filter((item) => isAfter(item.date, startDate) && isBefore(item.date, endDate)),
+      );
     },
     [firebase, user],
   );
