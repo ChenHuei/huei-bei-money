@@ -241,7 +241,7 @@ function FormDialog(props: FormDialogProps) {
                     type="numeric"
                     value={value}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                    onChange={(e) => setValue('price', parseInt(e.target.value, 10))}
+                    onChange={(e) => setValue('price', parseInt(e.target.value || '0', 10))}
                   />
                 </FormControl>
               </>

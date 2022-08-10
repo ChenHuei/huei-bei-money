@@ -216,7 +216,7 @@ function FormDialog(props: FormDialogProps) {
                   type="number"
                   value={value}
                   startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  onChange={(e) => setValue('huei', parseInt(e.target.value, 10))}
+                  onChange={(e) => setValue('huei', parseInt(e.target.value || '0', 10))}
                 />
               </FormControl>
             )}
@@ -244,7 +244,7 @@ function FormDialog(props: FormDialogProps) {
                   type="number"
                   value={value}
                   startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  onChange={(e) => setValue('bei', parseInt(e.target.value, 10))}
+                  onChange={(e) => setValue('bei', parseInt(e.target.value || '0', 10))}
                 />
               </FormControl>
             )}
@@ -272,7 +272,7 @@ function FormDialog(props: FormDialogProps) {
                   type="number"
                   value={value}
                   startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  onChange={(e) => setValue('family', parseInt(e.target.value, 10))}
+                  onChange={(e) => setValue('family', parseInt(e.target.value || '0', 10))}
                 />
               </FormControl>
             )}
