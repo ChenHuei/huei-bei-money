@@ -42,7 +42,7 @@ function Chart() {
       const [startDate, endDate] = data.date;
       const recordList = differentInMonthOrYear(startDate, endDate)
         ? await Promise.all(
-            [...Array(Math.abs(differenceInMonths(startDate, endDate))).keys()].map((element) =>
+            [...Array(Math.abs(differenceInMonths(startDate, endDate)) + 1).keys()].map((element) =>
               getHomeRecordApi(firebase, addMonths(startDate, element)),
             ),
           )
