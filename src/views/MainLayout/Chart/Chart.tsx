@@ -1,29 +1,31 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { addMonths, differenceInMonths, format, isAfter, isBefore } from 'date-fns';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut, getElementsAtEvent } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 
 import { ChartForm, DEFAULT_FORM } from '@/constants/chart';
 import { getHomeRecordApi } from '@/api/home';
-import { Record } from '@/views/MainLayout/Home/RecordList';
+import RecordList, { Record } from '@/views/MainLayout/Home/RecordList';
+import Circle from '@/views/MainLayout/Home/Header/Circle';
 import { differentInMonthOrYear } from '@/utils/date';
 import { formatCurrency } from '@/utils/currency';
 import { CATEGORY_COLOR } from '@/constants/color';
 
 import { MainLayoutOutletProps } from '../MainLayout';
 import FormDialog from './FormDialog';
-import Circle from '../Home/Header/Circle';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function Chart() {
+  const chartRef = useRef();
   const { firebase, user } = useOutletContext<MainLayoutOutletProps>();
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState<ChartForm>(DEFAULT_FORM);
   const [list, setList] = useState<Record[]>([]);
+  const [filter, setFilter] = useState<string>('');
 
   const onClose = useCallback(() => {
     setIsOpen(false);
@@ -42,9 +44,9 @@ function Chart() {
       const [startDate, endDate] = data.date;
       const recordList = differentInMonthOrYear(startDate, endDate)
         ? await Promise.all(
-            [...Array(Math.abs(differenceInMonths(startDate, endDate)) + 1).keys()].map((element) =>
-              getHomeRecordApi(firebase, addMonths(startDate, element)),
-            ),
+            [...Array(Math.abs(differenceInMonths(startDate, endDate)) + 1).keys()]
+              .reverse()
+              .map((element) => getHomeRecordApi(firebase, addMonths(startDate, element))),
           )
         : await getHomeRecordApi(firebase, startDate);
       setList(
@@ -89,6 +91,11 @@ function Chart() {
     [list],
   );
 
+  const filterData = useMemo(
+    () => (filter === '' ? [] : list.filter((item) => item.categoryName === filter)),
+    [filter, list],
+  );
+
   useEffect(() => {
     init(form);
   }, [form, init]);
@@ -122,20 +129,36 @@ function Chart() {
         {list.length === 0 ? (
           <div className="flex flex-1 justify-center items-center text-3xl text-white">空的</div>
         ) : (
-          <Doughnut
-            data={data}
-            plugins={[ChartDataLabels]}
-            options={{
-              plugins: {
-                datalabels: {
-                  color: 'white',
-                  formatter(value) {
-                    return formatCurrency(value);
+          <>
+            <Doughnut
+              ref={chartRef}
+              data={data}
+              plugins={[ChartDataLabels]}
+              onClick={(e) => {
+                try {
+                  const { index } = getElementsAtEvent(chartRef.current!, e)[0];
+                  const { labels } = data;
+                  setFilter(labels !== undefined ? labels[index] : '');
+                } catch (error) {
+                  setFilter('');
+                }
+              }}
+              options={{
+                plugins: {
+                  datalabels: {
+                    color: 'white',
+                    formatter(value) {
+                      return formatCurrency(value);
+                    },
                   },
                 },
-              },
-            }}
-          />
+              }}
+            />
+            <div className="flex flex-col mb-4">
+              <h2 className="mb-4 text-xl">細項列表</h2>
+              <RecordList user={user} list={filterData} />
+            </div>
+          </>
         )}
       </div>
       <FormDialog isOpen={isOpen} form={form} onClose={onClose} onConfirm={onConfirm} />

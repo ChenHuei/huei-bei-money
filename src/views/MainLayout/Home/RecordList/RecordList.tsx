@@ -20,7 +20,7 @@ interface Record {
 interface RecordListProps {
   user: User;
   list: Record[];
-  onClick: (data: Record) => void;
+  onClick?: (data: Record) => void;
 }
 
 function RecordList(props: RecordListProps) {
@@ -47,7 +47,7 @@ function RecordList(props: RecordListProps) {
             key={id}
             className="flex items-center mb-4"
             aria-hidden
-            onClick={() => onClick(item)}
+            onClick={() => onClick && onClick(item)}
           >
             <div className="w-8 h-8 flex justify-center items-center bg-primary text-white rounded-lg">
               <p>{categoryName}</p>
