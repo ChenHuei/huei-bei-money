@@ -21,6 +21,7 @@ export default defineConfig({
         short_name: 'Huei & Bei',
         description: 'Huei & Bei cost record ❤️❤️❤️',
         theme_color: '#92A9BD',
+        background_color: '#92A9BD',
         start_url: '/?standalone=true',
         orientation: 'portrait-primary',
         icons: [
