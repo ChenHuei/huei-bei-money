@@ -39,7 +39,7 @@ function RecordList(props: RecordListProps) {
           price,
           categoryId,
         } = item;
-        const isSelf = user.displayName === item.createdBy;
+        const isSelf = user.displayName === createdBy;
         const isIncome = categoryId === INCOME_CATEGORY_ID;
 
         return (
