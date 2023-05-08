@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HomeIcon from '@mui/icons-material/Home';
 
 import { FamilyCategory } from '@/constants/family';
 import { formatCurrency } from '@/utils/currency';
@@ -40,19 +39,12 @@ function RecordList(props: RecordListProps) {
             <div className="flex-1 mx-3">
               <div className="flex">
                 <p>{format(new Date(date), 'MM/dd')}</p>
-                <p className="flex items-center">
-                  {huei > 0 || bei > 0 ? (
-                    <span className="text-primaryDarker">
-                      <AccountCircleIcon className="ml-2 mr-1 text-sm" />
-                      {huei > 0 ? 'huei' : 'bei'}
-                    </span>
-                  ) : (
-                    <span className="tw-secondary">
-                      <HomeIcon className="ml-2 mr-1 text-sm" />
-                      family
-                    </span>
-                  )}
-                </p>
+                {(huei > 0 || bei > 0) && (
+                  <p className="flex items-center text-primaryDarker">
+                    <AccountCircleIcon className="ml-2 mr-1 text-sm" />
+                    {huei > 0 ? 'huei' : 'bei'}
+                  </p>
+                )}
               </div>
               <p>{title}</p>
             </div>
