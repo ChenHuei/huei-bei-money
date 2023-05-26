@@ -26,6 +26,10 @@ function RecordList(props: RecordListProps) {
     <div>
       {list.map((item) => {
         const { id, type, title, date, huei, bei } = item;
+        const userList: { label: string; value: number }[] = [
+          { label: 'huei', value: huei },
+          { label: 'bei', value: bei },
+        ];
         return (
           <div
             key={id}
@@ -39,10 +43,16 @@ function RecordList(props: RecordListProps) {
             <div className="flex-1 mx-3">
               <div className="flex">
                 <p>{format(new Date(date), 'MM/dd')}</p>
-                {(huei > 0 || bei > 0) && (
+                {type === FamilyCategory.expend && userList.some((element) => element.value > 0) && (
                   <p className="flex items-center text-primaryDarker">
                     <AccountCircleIcon className="ml-2 mr-1 text-sm" />
-                    {huei > 0 ? 'huei' : 'bei'}
+                    {userList.reduce(
+                      (acc, element) =>
+                        element.value > 0
+                          ? `${acc}${acc.length > 0 ? '/' : ''}${element.label}`
+                          : acc,
+                      '',
+                    )}
                   </p>
                 )}
               </div>
