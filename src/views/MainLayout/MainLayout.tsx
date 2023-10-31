@@ -74,13 +74,13 @@ function MainLayout() {
         />
       </main>
       <BottomNavigation
-        className="sticky bottom-0 right-0"
+        className="sticky bottom-0 right-0 pb-4"
+        style={{ height: '78px' }}
         showLabels
         value={tab}
         onChange={(_, newValue) => {
           setTab(newValue);
-        }}
-      >
+        }}>
         {TABS_LIST.map((item) => (
           <BottomNavigationAction key={item.to} {...item} component={Link} />
         ))}

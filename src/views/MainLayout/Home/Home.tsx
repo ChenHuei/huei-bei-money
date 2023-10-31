@@ -148,7 +148,7 @@ function Home() {
           }}
         />
       </div>
-      <div className="fixed bottom-14 right-0 flex justify-end p-4">
+      <div className="fixed bottom-20 right-0 flex justify-end p-4">
         <Fab color="primary" aria-label="add" onClick={() => setOpenFormDialog(true)}>
           <AddIcon />
         </Fab>
