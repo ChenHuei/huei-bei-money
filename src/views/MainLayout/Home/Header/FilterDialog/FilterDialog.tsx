@@ -57,8 +57,7 @@ function FilterDialog(props: FilterDialogProps) {
               onChange={(e) => {
                 const val = e.target.value;
                 setInnerValue(typeof val === 'string' ? val.split(',') : val);
-              }}
-            >
+              }}>
               {USER_LIST.map((item) => (
                 <MenuItem key={item} value={item}>
                   <Checkbox checked={innerValue.includes(item)} />
@@ -68,7 +67,7 @@ function FilterDialog(props: FilterDialogProps) {
             </Select>
           </FormControl>
         </div>
-        <div className="sticky bottom-0 left-0 h-12">
+        <div className="sticky bottom-4 left-0 h-12">
           <Button
             className="h-full"
             variant="contained"
@@ -77,8 +76,7 @@ function FilterDialog(props: FilterDialogProps) {
             onClick={() => {
               onChange(innerValue);
               onClose();
-            }}
-          >
+            }}>
             確認
           </Button>
         </div>

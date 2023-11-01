@@ -75,8 +75,7 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpenDate(true)}
-                >
+                  onClick={() => setOpenDate(true)}>
                   <InputLabel htmlFor="date">日期</InputLabel>
                   <OutlinedInput
                     id="date"
@@ -95,7 +94,7 @@ function FormDialog(props: FormDialogProps) {
             )}
           />
         </div>
-        <Stack direction="row" spacing={2} className="sticky bottom-0 left-0 h-12 flex">
+        <Stack direction="row" spacing={2} className="sticky bottom-4 left-0 h-12 flex">
           <Button type="submit" className="h-full" variant="contained" color="secondary" fullWidth>
             確認
           </Button>

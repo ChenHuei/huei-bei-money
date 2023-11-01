@@ -131,8 +131,7 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpenDate(true)}
-                >
+                  onClick={() => setOpenDate(true)}>
                   <InputLabel htmlFor="date">日期</InputLabel>
                   <OutlinedInput
                     id="date"
@@ -164,8 +163,7 @@ function FormDialog(props: FormDialogProps) {
                 onChange={(e) => {
                   setValue('categoryId', e.target.value);
                   setValue('subCategoryId', '');
-                }}
-              >
+                }}>
                 {categoryList.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.name}
@@ -197,8 +195,7 @@ function FormDialog(props: FormDialogProps) {
                   if (currentSubCategory) {
                     setValue('subCategoryName', currentSubCategory.name);
                   }
-                }}
-              >
+                }}>
                 {currentCategory ? (
                   currentCategory.subCategory.map((item) => (
                     <MenuItem key={item.id} value={item.id}>
@@ -232,8 +229,7 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpen(true)}
-                >
+                  onClick={() => setOpen(true)}>
                   <InputLabel htmlFor="price">金額</InputLabel>
                   <OutlinedInput
                     id="price"
@@ -276,8 +272,7 @@ function FormDialog(props: FormDialogProps) {
                   row
                   onChange={(e) => {
                     setValue('createdBy', e.target.value);
-                  }}
-                >
+                  }}>
                   {USER_LIST.map((user) => (
                     <FormControlLabel key={user} value={user} control={<Radio />} label={user} />
                   ))}
@@ -286,15 +281,14 @@ function FormDialog(props: FormDialogProps) {
             )}
           />
         </div>
-        <Stack direction="row" spacing={2} className="sticky bottom-0 left-0 h-12 flex">
+        <Stack direction="row" spacing={2} className="sticky bottom-4 left-0 h-12 flex">
           {form !== undefined && (
             <Button
               className="h-full"
               variant="outlined"
               color="secondary"
               fullWidth
-              onClick={() => setOpenAlert(true)}
-            >
+              onClick={() => setOpenAlert(true)}>
               刪除
             </Button>
           )}

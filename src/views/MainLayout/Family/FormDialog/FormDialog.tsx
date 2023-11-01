@@ -84,8 +84,7 @@ function FormDialog(props: FormDialogProps) {
       <Dialog
         open={calculator.open}
         onClose={() => setCalculator({ open: false, target: '', price: 0 })}
-        TransitionComponent={Transition}
-      >
+        TransitionComponent={Transition}>
         <Calculator
           price={calculator.price}
           onConfirm={(val) => {
@@ -127,8 +126,7 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpenDate(true)}
-                >
+                  onClick={() => setOpenDate(true)}>
                   <InputLabel htmlFor="date">日期</InputLabel>
                   <OutlinedInput
                     id="date"
@@ -165,8 +163,7 @@ function FormDialog(props: FormDialogProps) {
                     'title',
                     val === FamilyCategory.savings ? format(getValues('date'), 'yyyy/MM') : '',
                   );
-                }}
-              >
+                }}>
                 {CATEGORY_LIST.map((item) => (
                   <MenuItem key={item.value} value={item.value}>
                     {item.label}
@@ -207,8 +204,7 @@ function FormDialog(props: FormDialogProps) {
                     target: 'huei',
                     price: value,
                   })
-                }
-              >
+                }>
                 <InputLabel htmlFor="huei">Huei 金額</InputLabel>
                 <OutlinedInput
                   id="huei"
@@ -235,8 +231,7 @@ function FormDialog(props: FormDialogProps) {
                     target: 'bei',
                     price: value,
                   })
-                }
-              >
+                }>
                 <InputLabel htmlFor="bei">Bei 金額</InputLabel>
                 <OutlinedInput
                   id="bei"
@@ -263,8 +258,7 @@ function FormDialog(props: FormDialogProps) {
                     target: 'family',
                     price: value,
                   })
-                }
-              >
+                }>
                 <InputLabel htmlFor="family">Family 金額</InputLabel>
                 <OutlinedInput
                   id="family"
@@ -278,15 +272,14 @@ function FormDialog(props: FormDialogProps) {
             )}
           />
         </div>
-        <Stack direction="row" spacing={2} className="sticky bottom-0 left-0 h-12 flex">
+        <Stack direction="row" spacing={2} className="sticky bottom-4 left-0 h-12 flex">
           {form !== undefined && (
             <Button
               className="h-full"
               variant="outlined"
               color="secondary"
               fullWidth
-              onClick={() => setOpenAlert(true)}
-            >
+              onClick={() => setOpenAlert(true)}>
               刪除
             </Button>
           )}
