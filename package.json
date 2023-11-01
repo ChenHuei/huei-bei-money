@@ -53,6 +53,6 @@
     "vite-plugin-pwa": "^0.11.13"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": "eslint --cache --fix"
+    "src/**/*.{js,jsx,ts,tsx}": "eslint --cache --fix prettier --write"
   }
 }
