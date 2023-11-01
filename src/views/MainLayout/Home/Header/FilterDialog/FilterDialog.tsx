@@ -73,7 +73,7 @@ function FilterDialog(props: FilterDialogProps) {
             </Select>
           </FormControl>
         </div>
-        <div className="sticky bottom-4 left-0 h-12">
+        <div className="sticky bottom-8 left-0 h-12">
           <Button
             className="h-full"
             variant="contained"

@@ -306,7 +306,7 @@ function FormDialog(props: FormDialogProps) {
         <Stack
           direction="row"
           spacing={2}
-          className="sticky bottom-4 left-0 h-12 flex"
+          className="sticky bottom-8 left-0 h-12 flex"
         >
           {form !== undefined && (
             <Button
