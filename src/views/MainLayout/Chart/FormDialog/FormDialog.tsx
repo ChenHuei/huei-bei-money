@@ -44,14 +44,22 @@ function FormDialog(props: FormDialogProps) {
   }, [form, isOpen, reset, setValue]);
 
   return (
-    <Dialog fullScreen open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog
+      fullScreen
+      open={isOpen}
+      onClose={onClose}
+      TransitionComponent={Transition}
+    >
       <AppBar className="py-1" position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
           <p className="text-xl">圖表篩選條件</p>
         </Toolbar>
       </AppBar>
-      <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
+      <form
+        className="flex flex-col flex-1 p-4"
+        onSubmit={handleSubmit(onConfirm)}
+      >
         <div className="flex-1">
           <Controller
             name="date"
@@ -75,12 +83,15 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpenDate(true)}>
+                  onClick={() => setOpenDate(true)}
+                >
                   <InputLabel htmlFor="date">日期</InputLabel>
                   <OutlinedInput
                     id="date"
                     label="日期"
-                    value={`${value[0] === null ? null : format(value[0], 'yyyy/MM/dd')} - ${
+                    value={`${
+                      value[0] === null ? null : format(value[0], 'yyyy/MM/dd')
+                    } - ${
                       value[1] === null ? null : format(value[1], 'yyyy/MM/dd')
                     }`}
                     startAdornment={
@@ -94,8 +105,18 @@ function FormDialog(props: FormDialogProps) {
             )}
           />
         </div>
-        <Stack direction="row" spacing={2} className="sticky bottom-4 left-0 h-12 flex">
-          <Button type="submit" className="h-full" variant="contained" color="secondary" fullWidth>
+        <Stack
+          direction="row"
+          spacing={2}
+          className="sticky bottom-4 left-0 h-12 flex"
+        >
+          <Button
+            type="submit"
+            className="h-full"
+            variant="contained"
+            color="secondary"
+            fullWidth
+          >
             確認
           </Button>
         </Stack>

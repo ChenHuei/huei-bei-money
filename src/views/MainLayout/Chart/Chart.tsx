@@ -1,7 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { addMonths, differenceInMonths, format, isAfter, isBefore } from 'date-fns';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData } from 'chart.js';
+import {
+  addMonths,
+  differenceInMonths,
+  format,
+  isAfter,
+  isBefore,
+} from 'date-fns';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartData,
+} from 'chart.js';
 import { Doughnut, getElementsAtEvent } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -36,7 +48,7 @@ function Chart() {
       setForm(data);
       onClose();
     },
-    [onClose],
+    [onClose]
   );
 
   const init = useCallback(
@@ -44,19 +56,28 @@ function Chart() {
       const [startDate, endDate] = data.date;
       const recordList = differentInMonthOrYear(startDate, endDate)
         ? await Promise.all(
-            [...Array(Math.abs(differenceInMonths(startDate, endDate)) + 1).keys()]
+            [
+              ...Array(
+                Math.abs(differenceInMonths(startDate, endDate)) + 1
+              ).keys(),
+            ]
               .reverse()
-              .map((element) => getHomeRecordApi(firebase, addMonths(startDate, element))),
+              .map((element) =>
+                getHomeRecordApi(firebase, addMonths(startDate, element))
+              )
           )
         : await getHomeRecordApi(firebase, startDate);
       setList(
         recordList
           .flat()
           .filter((item) => item.createdBy === user.displayName)
-          .filter((item) => isAfter(item.date, startDate) && isBefore(item.date, endDate)),
+          .filter(
+            (item) =>
+              isAfter(item.date, startDate) && isBefore(item.date, endDate)
+          )
       );
     },
-    [firebase, user],
+    [firebase, user]
   );
 
   const data = useMemo(
@@ -67,12 +88,16 @@ function Chart() {
           const { labels, datasets } = acc;
 
           if (labels?.includes(categoryName)) {
-            const index = labels.findIndex((element: string) => element === categoryName);
+            const index = labels.findIndex(
+              (element: string) => element === categoryName
+            );
             datasets[0].data[index] += price;
           } else {
             labels?.push(categoryName);
             datasets[0].data.push(price);
-            (datasets[0].backgroundColor as string[]).push(CATEGORY_COLOR[categoryName]);
+            (datasets[0].backgroundColor as string[]).push(
+              CATEGORY_COLOR[categoryName]
+            );
           }
           return acc;
         },
@@ -86,14 +111,15 @@ function Chart() {
               hoverOffset: 4,
             },
           ],
-        } as ChartData<'doughnut', number[], string>,
+        } as ChartData<'doughnut', number[], string>
       ),
-    [list],
+    [list]
   );
 
   const filterData = useMemo(
-    () => (filter === '' ? [] : list.filter((item) => item.categoryName === filter)),
-    [filter, list],
+    () =>
+      filter === '' ? [] : list.filter((item) => item.categoryName === filter),
+    [filter, list]
   );
 
   useEffect(() => {
@@ -127,7 +153,9 @@ function Chart() {
       </header>
       <div className="p-4 pt-8">
         {list.length === 0 ? (
-          <div className="flex flex-1 justify-center items-center text-3xl text-white">空的</div>
+          <div className="flex flex-1 justify-center items-center text-3xl text-white">
+            空的
+          </div>
         ) : (
           <>
             <Doughnut
@@ -161,7 +189,12 @@ function Chart() {
           </>
         )}
       </div>
-      <FormDialog isOpen={isOpen} form={form} onClose={onClose} onConfirm={onConfirm} />
+      <FormDialog
+        isOpen={isOpen}
+        form={form}
+        onClose={onClose}
+        onConfirm={onConfirm}
+      />
     </div>
   );
 }

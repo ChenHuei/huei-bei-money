@@ -1,6 +1,12 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useEffect, useState, useRef } from 'react';
-import { Link, Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from 'react-router-dom';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore/lite';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
@@ -23,7 +29,8 @@ function MainLayout() {
   const location = useLocation();
   const firebase = useFirebase();
   const userRef = useRef<User | null>(null);
-  const { setSnackbarState, setIsOpenLoading } = useOutletContext<AppOutletProps>();
+  const { setSnackbarState, setIsOpenLoading } =
+    useOutletContext<AppOutletProps>();
   const [isAuth, setIsAuth] = useState(false);
   const [tab, setTab] = useState(0);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -80,7 +87,8 @@ function MainLayout() {
         value={tab}
         onChange={(_, newValue) => {
           setTab(newValue);
-        }}>
+        }}
+      >
         {TABS_LIST.map((item) => (
           <BottomNavigationAction key={item.to} {...item} component={Link} />
         ))}

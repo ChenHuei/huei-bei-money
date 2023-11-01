@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Navigate, Route, RouteProps, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  RouteProps,
+  Routes,
+} from 'react-router-dom';
 import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 import './index.css';
@@ -80,7 +86,7 @@ ReactDOM.render(
       <Routes>{renderRoute(ROUTES)}</Routes>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
 
 // eslint-disable-next-line import/prefer-default-export

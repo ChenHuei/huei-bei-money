@@ -1,5 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import SavingsIcon from '@mui/icons-material/Savings';
 import InfoIcon from '@mui/icons-material/Info';
 
@@ -22,10 +28,11 @@ function Header(props: HeaderProps) {
       list.reduce(
         (acc, item) =>
           acc +
-          (item.huei + item.bei + item.family) * (item.type === FamilyCategory.savings ? 1 : -1),
-        0,
+          (item.huei + item.bei + item.family) *
+            (item.type === FamilyCategory.savings ? 1 : -1),
+        0
       ),
-    [list],
+    [list]
   );
 
   const getUserAmount = useCallback(
@@ -34,10 +41,11 @@ function Header(props: HeaderProps) {
         .filter((item) => item[user] !== 0)
         .reverse()
         .reduce((acc, item) => {
-          const amount = item[user] * (item.type === FamilyCategory.savings ? 1 : -1);
+          const amount =
+            item[user] * (item.type === FamilyCategory.savings ? 1 : -1);
           return acc + amount > 0 ? 0 : acc + amount;
         }, 0),
-    [list],
+    [list]
   );
 
   return (
@@ -56,7 +64,7 @@ function Header(props: HeaderProps) {
                 <ListItemIcon>{user.image}</ListItemIcon>
                 <ListItemText
                   primary={`${user.label}: ${formatCurrency(
-                    Math.min(getUserAmount(user.value), 0),
+                    Math.min(getUserAmount(user.value), 0)
                   )}`}
                 />
               </ListItemButton>
@@ -68,7 +76,10 @@ function Header(props: HeaderProps) {
         <div className="flex items-center text-white">
           <SavingsIcon className="scale-150" />
           <span className="mx-4">{formatCurrency(total)}</span>
-          <InfoIcon className="scale-75" onClick={() => setOpenDetailDialog(true)} />
+          <InfoIcon
+            className="scale-75"
+            onClick={() => setOpenDetailDialog(true)}
+          />
         </div>
       </header>
     </>

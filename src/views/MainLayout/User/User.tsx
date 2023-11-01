@@ -6,7 +6,8 @@ import { MainLayoutOutletProps } from '../MainLayout';
 
 function User() {
   const navigate = useNavigate();
-  const { setSnackbarState, setIsOpenLoading, user } = useOutletContext<MainLayoutOutletProps>();
+  const { setSnackbarState, setIsOpenLoading, user } =
+    useOutletContext<MainLayoutOutletProps>();
 
   const firebaseAuth = getAuth();
 
@@ -28,7 +29,11 @@ function User() {
   return (
     <div className="flex-1 p-4">
       <h1 className="mb-4 text-xl">Hi, {user.displayName}</h1>
-      <Button fullWidth variant="contained" onClick={() => logout(firebaseAuth)}>
+      <Button
+        fullWidth
+        variant="contained"
+        onClick={() => logout(firebaseAuth)}
+      >
         登出
       </Button>
     </div>

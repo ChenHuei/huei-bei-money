@@ -36,7 +36,12 @@ function FilterDialog(props: FilterDialogProps) {
   }, [open, value]);
 
   return (
-    <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog
+      fullScreen
+      open={open}
+      onClose={onClose}
+      TransitionComponent={Transition}
+    >
       <AppBar className="py-1" position="sticky" color="secondary">
         <Toolbar>
           <CloseIcon className="mr-2" aria-hidden onClick={onClose} />
@@ -57,7 +62,8 @@ function FilterDialog(props: FilterDialogProps) {
               onChange={(e) => {
                 const val = e.target.value;
                 setInnerValue(typeof val === 'string' ? val.split(',') : val);
-              }}>
+              }}
+            >
               {USER_LIST.map((item) => (
                 <MenuItem key={item} value={item}>
                   <Checkbox checked={innerValue.includes(item)} />
@@ -76,7 +82,8 @@ function FilterDialog(props: FilterDialogProps) {
             onClick={() => {
               onChange(innerValue);
               onClose();
-            }}>
+            }}
+          >
             確認
           </Button>
         </div>

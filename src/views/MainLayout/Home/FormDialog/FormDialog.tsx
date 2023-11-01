@@ -54,29 +54,38 @@ interface FormDialogProps {
 }
 
 function FormDialog(props: FormDialogProps) {
-  const { isOpen, form, userName, categoryList = [], onConfirm, onDelete, onClose } = props;
+  const {
+    isOpen,
+    form,
+    userName,
+    categoryList = [],
+    onConfirm,
+    onDelete,
+    onClose,
+  } = props;
   const [open, setOpen] = useState(false);
   const [openDate, setOpenDate] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  const { control, reset, handleSubmit, watch, setValue, getValues } = useForm<Record>({
-    defaultValues: {
-      id: '',
-      date: new Date().getTime(),
-      categoryId: '',
-      subCategoryId: '',
-      categoryName: '',
-      subCategoryName: '',
-      price: 0,
-      description: '',
-      createdBy: userName,
-    },
-  });
+  const { control, reset, handleSubmit, watch, setValue, getValues } =
+    useForm<Record>({
+      defaultValues: {
+        id: '',
+        date: new Date().getTime(),
+        categoryId: '',
+        subCategoryId: '',
+        categoryName: '',
+        subCategoryName: '',
+        price: 0,
+        description: '',
+        createdBy: userName,
+      },
+    });
 
   const currentCategoryId = watch('categoryId', '');
 
   const currentCategory = useMemo(
     () => categoryList.find((item) => item.id === currentCategoryId),
-    [categoryList, currentCategoryId],
+    [categoryList, currentCategoryId]
   );
 
   useEffect(() => {
@@ -98,10 +107,18 @@ function FormDialog(props: FormDialogProps) {
   }, [form, isOpen, reset, setValue]);
 
   return (
-    <Dialog fullScreen open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog
+      fullScreen
+      open={isOpen}
+      onClose={onClose}
+      TransitionComponent={Transition}
+    >
       <AlertDialog
         isOpen={openAlert}
-        title={`確定要刪除 ${format(getValues('date'), 'yyyy/MM/dd')} 這一筆紀錄嗎 ?`}
+        title={`確定要刪除 ${format(
+          getValues('date'),
+          'yyyy/MM/dd'
+        )} 這一筆紀錄嗎 ?`}
         onConfirm={() => onDelete(getValues())}
         onClose={() => setOpenAlert(false)}
       />
@@ -111,7 +128,10 @@ function FormDialog(props: FormDialogProps) {
           <p className="text-xl">{form ? '編輯' : '新增'}紀錄</p>
         </Toolbar>
       </AppBar>
-      <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
+      <form
+        className="flex flex-col flex-1 p-4"
+        onSubmit={handleSubmit(onConfirm)}
+      >
         <div className="flex-1">
           <Controller
             name="date"
@@ -131,7 +151,8 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpenDate(true)}>
+                  onClick={() => setOpenDate(true)}
+                >
                   <InputLabel htmlFor="date">日期</InputLabel>
                   <OutlinedInput
                     id="date"
@@ -163,7 +184,8 @@ function FormDialog(props: FormDialogProps) {
                 onChange={(e) => {
                   setValue('categoryId', e.target.value);
                   setValue('subCategoryId', '');
-                }}>
+                }}
+              >
                 {categoryList.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.name}
@@ -189,13 +211,14 @@ function FormDialog(props: FormDialogProps) {
                   const { value: val } = e.target;
 
                   setValue('subCategoryId', val);
-                  const currentSubCategory = (currentCategory as Category).subCategory.find(
-                    (item) => item.id === val,
-                  );
+                  const currentSubCategory = (
+                    currentCategory as Category
+                  ).subCategory.find((item) => item.id === val);
                   if (currentSubCategory) {
                     setValue('subCategoryName', currentSubCategory.name);
                   }
-                }}>
+                }}
+              >
                 {currentCategory ? (
                   currentCategory.subCategory.map((item) => (
                     <MenuItem key={item.id} value={item.id}>
@@ -216,7 +239,11 @@ function FormDialog(props: FormDialogProps) {
             }}
             render={({ field: { value }, fieldState: { error } }) => (
               <>
-                <Dialog open={open} onClose={() => setOpen(false)} TransitionComponent={Transition}>
+                <Dialog
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  TransitionComponent={Transition}
+                >
                   <Calculator
                     price={value}
                     onConfirm={(val) => {
@@ -229,15 +256,20 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpen(true)}>
+                  onClick={() => setOpen(true)}
+                >
                   <InputLabel htmlFor="price">金額</InputLabel>
                   <OutlinedInput
                     id="price"
                     label="price"
                     type="numeric"
                     value={value}
-                    startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                    onChange={(e) => setValue('price', parseInt(e.target.value || '0', 10))}
+                    startAdornment={
+                      <InputAdornment position="start">$</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setValue('price', parseInt(e.target.value || '0', 10))
+                    }
                   />
                 </FormControl>
               </>
@@ -272,27 +304,44 @@ function FormDialog(props: FormDialogProps) {
                   row
                   onChange={(e) => {
                     setValue('createdBy', e.target.value);
-                  }}>
+                  }}
+                >
                   {USER_LIST.map((user) => (
-                    <FormControlLabel key={user} value={user} control={<Radio />} label={user} />
+                    <FormControlLabel
+                      key={user}
+                      value={user}
+                      control={<Radio />}
+                      label={user}
+                    />
                   ))}
                 </RadioGroup>
               </FormControl>
             )}
           />
         </div>
-        <Stack direction="row" spacing={2} className="sticky bottom-4 left-0 h-12 flex">
+        <Stack
+          direction="row"
+          spacing={2}
+          className="sticky bottom-4 left-0 h-12 flex"
+        >
           {form !== undefined && (
             <Button
               className="h-full"
               variant="outlined"
               color="secondary"
               fullWidth
-              onClick={() => setOpenAlert(true)}>
+              onClick={() => setOpenAlert(true)}
+            >
               刪除
             </Button>
           )}
-          <Button type="submit" className="h-full" variant="contained" color="secondary" fullWidth>
+          <Button
+            type="submit"
+            className="h-full"
+            variant="contained"
+            color="secondary"
+            fullWidth
+          >
             {form === undefined ? '新增' : '儲存'}
           </Button>
         </Stack>

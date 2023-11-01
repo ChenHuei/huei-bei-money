@@ -48,12 +48,17 @@ function Calculator(props: CalculatorProps) {
           setCurrent(type);
           break;
         }
-        if ((lastLetter === '*' && type === '-') || (lastLetter === '/' && type === '-')) {
+        if (
+          (lastLetter === '*' && type === '-') ||
+          (lastLetter === '/' && type === '-')
+        ) {
           setCurrent(current + type);
           break;
         }
         setCurrent(
-          ['+', '-', '*', '/'].includes(lastLetter) ? current.slice(0, -1) + type : current + type,
+          ['+', '-', '*', '/'].includes(lastLetter)
+            ? current.slice(0, -1) + type
+            : current + type
         );
         break;
       case '.':

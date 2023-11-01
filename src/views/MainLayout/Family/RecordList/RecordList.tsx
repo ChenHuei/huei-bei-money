@@ -43,25 +43,28 @@ function RecordList(props: RecordListProps) {
             <div className="flex-1 mx-3">
               <div className="flex">
                 <p>{format(new Date(date), 'MM/dd')}</p>
-                {type === FamilyCategory.expend && userList.some((element) => element.value > 0) && (
-                  <p className="flex items-center text-primaryDarker">
-                    <AccountCircleIcon className="ml-2 mr-1 text-sm" />
-                    {userList.reduce(
-                      (acc, element) =>
-                        element.value > 0
-                          ? `${acc}${acc.length > 0 ? '/' : ''}${element.label}`
-                          : acc,
-                      '',
-                    )}
-                  </p>
-                )}
+                {type === FamilyCategory.expend &&
+                  userList.some((element) => element.value > 0) && (
+                    <p className="flex items-center text-primaryDarker">
+                      <AccountCircleIcon className="ml-2 mr-1 text-sm" />
+                      {userList.reduce(
+                        (acc, element) =>
+                          element.value > 0
+                            ? `${acc}${acc.length > 0 ? '/' : ''}${
+                                element.label
+                              }`
+                            : acc,
+                        ''
+                      )}
+                    </p>
+                  )}
               </div>
               <p>{title}</p>
             </div>
             <p>
               {formatCurrency(
                 (item.huei + item.bei + item.family) *
-                  (item.type === FamilyCategory.savings ? 1 : -1),
+                  (item.type === FamilyCategory.savings ? 1 : -1)
               )}
             </p>
           </div>

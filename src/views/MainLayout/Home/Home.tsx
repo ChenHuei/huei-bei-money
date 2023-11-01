@@ -27,7 +27,7 @@ function Home() {
   const [form, setForm] = useState<Record | undefined>(undefined);
   const [list, setList] = useState<Record[]>([]);
   const [filterUser, setFilterUser] = useState<string[]>(
-    [user.displayName ?? ''].filter((item) => item !== ''),
+    [user.displayName ?? ''].filter((item) => item !== '')
   );
 
   const total = useMemo(
@@ -35,10 +35,12 @@ function Home() {
       list
         .filter((item) => filterUser.includes(item.createdBy))
         .reduce(
-          (acc, item) => acc + (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1) * item.price,
-          0,
+          (acc, item) =>
+            acc +
+            (item.categoryId === INCOME_CATEGORY_ID ? 1 : -1) * item.price,
+          0
         ),
-    [list, filterUser],
+    [list, filterUser]
   );
 
   const onClose = useCallback(() => {
@@ -59,7 +61,7 @@ function Home() {
         setIsOpenLoading(false);
       }
     },
-    [firebase, onClose, setIsOpenLoading],
+    [firebase, onClose, setIsOpenLoading]
   );
 
   const onCreate = useCallback(
@@ -77,7 +79,7 @@ function Home() {
         setIsOpenLoading(false);
       }
     },
-    [firebase, setIsOpenLoading, setSnackbarState],
+    [firebase, setIsOpenLoading, setSnackbarState]
   );
 
   const onUpdate = useCallback(
@@ -103,7 +105,7 @@ function Home() {
         setIsOpenLoading(false);
       }
     },
-    [firebase, setIsOpenLoading, setSnackbarState],
+    [firebase, setIsOpenLoading, setSnackbarState]
   );
 
   const onDelete = useCallback(
@@ -122,7 +124,7 @@ function Home() {
         setIsOpenLoading(false);
       }
     },
-    [firebase, setIsOpenLoading, setSnackbarState],
+    [firebase, setIsOpenLoading, setSnackbarState]
   );
 
   useEffect(() => {
@@ -149,7 +151,11 @@ function Home() {
         />
       </div>
       <div className="fixed bottom-20 right-0 flex justify-end p-4">
-        <Fab color="primary" aria-label="add" onClick={() => setOpenFormDialog(true)}>
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => setOpenFormDialog(true)}
+        >
           <AddIcon />
         </Fab>
       </div>

@@ -12,7 +12,8 @@ interface LoginForm {
 
 function Login() {
   const navigate = useNavigate();
-  const { setSnackbarState, setIsOpenLoading } = useOutletContext<AppOutletProps>();
+  const { setSnackbarState, setIsOpenLoading } =
+    useOutletContext<AppOutletProps>();
   const { control, handleSubmit, setValue } = useForm<LoginForm>({
     defaultValues: {
       email: '',

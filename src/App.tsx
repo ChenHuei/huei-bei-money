@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Backdrop, CircularProgress, createTheme, Snackbar, ThemeProvider } from '@mui/material';
+import {
+  Backdrop,
+  CircularProgress,
+  createTheme,
+  Snackbar,
+  ThemeProvider,
+} from '@mui/material';
 
 import Transition from './components/Transition';
 import FirebaseProvider from './context/firebase';
@@ -31,7 +37,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <FirebaseProvider>
-        <Outlet context={{ setSnackbarState, setIsOpenLoading } as AppOutletProps} />
+        <Outlet
+          context={{ setSnackbarState, setIsOpenLoading } as AppOutletProps}
+        />
         <Snackbar
           {...snackbarState}
           onClose={() => setSnackbarState({ open: false, message: '' })}

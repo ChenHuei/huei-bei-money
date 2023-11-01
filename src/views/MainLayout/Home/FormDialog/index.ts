@@ -1,2 +1,2 @@
-export { default } from "./FormDialog";
-export * from "./FormDialog";
+export { default } from './FormDialog';
+export * from './FormDialog';

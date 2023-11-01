@@ -1,5 +1,11 @@
 import { PropsWithChildren } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
 
 interface AlertDialogProps {
   isOpen: boolean;
@@ -10,7 +16,14 @@ interface AlertDialogProps {
 }
 
 function AlertDialog(props: PropsWithChildren<AlertDialogProps>) {
-  const { isOpen, isDisplayCancel = true, title, children, onConfirm, onClose } = props;
+  const {
+    isOpen,
+    isDisplayCancel = true,
+    title,
+    children,
+    onConfirm,
+    onClose,
+  } = props;
   return (
     <Dialog open={isOpen} fullWidth maxWidth="md" onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>

@@ -60,7 +60,7 @@ function Family() {
         setIsOpenLoading(false);
       }
     },
-    [firebase, form, init, setIsOpenLoading, setSnackbarState],
+    [firebase, form, init, setIsOpenLoading, setSnackbarState]
   );
 
   const onDelete = useCallback(
@@ -76,7 +76,7 @@ function Family() {
         setIsOpenLoading(false);
       }
     },
-    [firebase, init, setIsOpenLoading, setSnackbarState],
+    [firebase, init, setIsOpenLoading, setSnackbarState]
   );
 
   useEffect(() => {
@@ -96,7 +96,11 @@ function Family() {
         />
       </div>
       <div className="fixed bottom-20 right-0 flex justify-end p-4">
-        <Fab color="primary" aria-label="add" onClick={() => setOpenFormDialog(true)}>
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => setOpenFormDialog(true)}
+        >
           <AddIcon />
         </Fab>
       </div>

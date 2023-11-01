@@ -49,17 +49,18 @@ function FormDialog(props: FormDialogProps) {
     target: '',
     price: 0,
   });
-  const { control, handleSubmit, reset, getValues, setValue } = useForm<FamilyRecord>({
-    defaultValues: {
-      id: '',
-      date: new Date().getTime(),
-      type: '',
-      title: '',
-      huei: 0,
-      bei: 0,
-      family: 0,
-    },
-  });
+  const { control, handleSubmit, reset, getValues, setValue } =
+    useForm<FamilyRecord>({
+      defaultValues: {
+        id: '',
+        date: new Date().getTime(),
+        type: '',
+        title: '',
+        huei: 0,
+        bei: 0,
+        family: 0,
+      },
+    });
 
   useEffect(() => {
     if (isOpen) {
@@ -74,7 +75,12 @@ function FormDialog(props: FormDialogProps) {
   }, [form, isOpen, reset, setValue]);
 
   return (
-    <Dialog fullScreen open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog
+      fullScreen
+      open={isOpen}
+      onClose={onClose}
+      TransitionComponent={Transition}
+    >
       <AlertDialog
         isOpen={openAlert}
         title={`確定要刪除 ${getValues('title')} 這一筆紀錄嗎 ?`}
@@ -84,7 +90,8 @@ function FormDialog(props: FormDialogProps) {
       <Dialog
         open={calculator.open}
         onClose={() => setCalculator({ open: false, target: '', price: 0 })}
-        TransitionComponent={Transition}>
+        TransitionComponent={Transition}
+      >
         <Calculator
           price={calculator.price}
           onConfirm={(val) => {
@@ -99,7 +106,10 @@ function FormDialog(props: FormDialogProps) {
           <p className="text-xl">{form !== undefined ? '編輯' : '新增'}紀錄</p>
         </Toolbar>
       </AppBar>
-      <form className="flex flex-col flex-1 p-4" onSubmit={handleSubmit(onConfirm)}>
+      <form
+        className="flex flex-col flex-1 p-4"
+        onSubmit={handleSubmit(onConfirm)}
+      >
         <div className="flex-1">
           <Controller
             name="date"
@@ -117,7 +127,9 @@ function FormDialog(props: FormDialogProps) {
                       setValue('date', date);
                       setValue(
                         'title',
-                        getValues('type') === FamilyCategory.savings ? format(date, 'yyyy/MM') : '',
+                        getValues('type') === FamilyCategory.savings
+                          ? format(date, 'yyyy/MM')
+                          : ''
                       );
                     }}
                   />
@@ -126,7 +138,8 @@ function FormDialog(props: FormDialogProps) {
                   error={!!error}
                   margin="normal"
                   fullWidth
-                  onClick={() => setOpenDate(true)}>
+                  onClick={() => setOpenDate(true)}
+                >
                   <InputLabel htmlFor="date">日期</InputLabel>
                   <OutlinedInput
                     id="date"
@@ -161,9 +174,12 @@ function FormDialog(props: FormDialogProps) {
                   setValue('type', val as FamilyCategory);
                   setValue(
                     'title',
-                    val === FamilyCategory.savings ? format(getValues('date'), 'yyyy/MM') : '',
+                    val === FamilyCategory.savings
+                      ? format(getValues('date'), 'yyyy/MM')
+                      : ''
                   );
-                }}>
+                }}
+              >
                 {CATEGORY_LIST.map((item) => (
                   <MenuItem key={item.value} value={item.value}>
                     {item.label}
@@ -204,15 +220,20 @@ function FormDialog(props: FormDialogProps) {
                     target: 'huei',
                     price: value,
                   })
-                }>
+                }
+              >
                 <InputLabel htmlFor="huei">Huei 金額</InputLabel>
                 <OutlinedInput
                   id="huei"
                   label="Huei 金額"
                   type="number"
                   value={value}
-                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  onChange={(e) => setValue('huei', parseInt(e.target.value || '0', 10))}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                  onChange={(e) =>
+                    setValue('huei', parseInt(e.target.value || '0', 10))
+                  }
                 />
               </FormControl>
             )}
@@ -231,15 +252,20 @@ function FormDialog(props: FormDialogProps) {
                     target: 'bei',
                     price: value,
                   })
-                }>
+                }
+              >
                 <InputLabel htmlFor="bei">Bei 金額</InputLabel>
                 <OutlinedInput
                   id="bei"
                   label="Bei 金額"
                   type="number"
                   value={value}
-                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  onChange={(e) => setValue('bei', parseInt(e.target.value || '0', 10))}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                  onChange={(e) =>
+                    setValue('bei', parseInt(e.target.value || '0', 10))
+                  }
                 />
               </FormControl>
             )}
@@ -258,32 +284,48 @@ function FormDialog(props: FormDialogProps) {
                     target: 'family',
                     price: value,
                   })
-                }>
+                }
+              >
                 <InputLabel htmlFor="family">Family 金額</InputLabel>
                 <OutlinedInput
                   id="family"
                   label="Family 金額"
                   type="number"
                   value={value}
-                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                  onChange={(e) => setValue('family', parseInt(e.target.value || '0', 10))}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                  onChange={(e) =>
+                    setValue('family', parseInt(e.target.value || '0', 10))
+                  }
                 />
               </FormControl>
             )}
           />
         </div>
-        <Stack direction="row" spacing={2} className="sticky bottom-4 left-0 h-12 flex">
+        <Stack
+          direction="row"
+          spacing={2}
+          className="sticky bottom-4 left-0 h-12 flex"
+        >
           {form !== undefined && (
             <Button
               className="h-full"
               variant="outlined"
               color="secondary"
               fullWidth
-              onClick={() => setOpenAlert(true)}>
+              onClick={() => setOpenAlert(true)}
+            >
               刪除
             </Button>
           )}
-          <Button type="submit" className="h-full" variant="contained" color="secondary" fullWidth>
+          <Button
+            type="submit"
+            className="h-full"
+            variant="contained"
+            color="secondary"
+            fullWidth
+          >
             {form === undefined ? '新增' : '儲存'}
           </Button>
         </Stack>

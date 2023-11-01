@@ -18,7 +18,11 @@ export default function FirebaseProvider(props: PropsWithChildren<{}>) {
 
   const firebase = useMemo(() => getFirestore(app), [app]);
 
-  return <FirebaseContext.Provider value={firebase}>{props.children}</FirebaseContext.Provider>;
+  return (
+    <FirebaseContext.Provider value={firebase}>
+      {props.children}
+    </FirebaseContext.Provider>
+  );
 }
 
 export { FirebaseContext };
