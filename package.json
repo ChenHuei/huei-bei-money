@@ -1,6 +1,9 @@
 {
   "name": "huei-bei-money",
   "version": "0.0.0",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
