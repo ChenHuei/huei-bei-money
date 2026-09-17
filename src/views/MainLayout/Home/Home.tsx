@@ -11,7 +11,6 @@ import {
   getHomeRecordApi,
   removeHomeRecordApi,
 } from '@/api/home';
-import { differentInMonthOrYear } from '@/utils/date';
 import { INCOME_CATEGORY_ID } from '@/constants/home';
 
 import { MainLayoutOutletProps } from '../MainLayout';
@@ -85,17 +84,9 @@ function Home() {
   const onUpdate = useCallback(
     async (data: Record, originData: Record) => {
       try {
-        const { date: originDate, id } = originData;
         setIsOpenLoading(true);
 
-        if (differentInMonthOrYear(originDate, data.date)) {
-          await Promise.all([
-            removeHomeRecordApi(firebase, originDate, id as string),
-            addHomeRecordApi(firebase, data),
-          ]);
-        } else {
-          await updateHomeRecordApi(firebase, data);
-        }
+        await updateHomeRecordApi(firebase, data, originData.date);
 
         setCurrentDate(new Date(data.date));
         setSnackbarState({ open: true, message: '編輯成功' });

@@ -116,10 +116,12 @@ function FormDialog(props: FormDialogProps) {
       <AlertDialog
         isOpen={openAlert}
         title={`確定要刪除 ${format(
-          getValues('date'),
+          form?.date ?? getValues('date'),
           'yyyy/MM/dd'
         )} 這一筆紀錄嗎 ?`}
-        onConfirm={() => onDelete(getValues())}
+        onConfirm={() => {
+          if (form) onDelete(form);
+        }}
         onClose={() => setOpenAlert(false)}
       />
       <AppBar className="py-1" position="sticky" color="secondary">
@@ -235,7 +237,7 @@ function FormDialog(props: FormDialogProps) {
             name="price"
             control={control}
             rules={{
-              validate: () => Number(getValues('price')) !== 0,
+              validate: (value) => Number.isFinite(value) && value !== 0,
             }}
             render={({ field: { value }, fieldState: { error } }) => (
               <>

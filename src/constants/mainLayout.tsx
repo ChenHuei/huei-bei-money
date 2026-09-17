@@ -18,14 +18,14 @@ export const TABS_LIST: Tab[] = [
     icon: <HomeIcon />,
   },
   {
-    to: '/home/chart',
-    label: '圖表',
-    icon: <BarChartIcon />,
-  },
-  {
     to: '/home/family',
     label: '家庭基金',
     icon: <FamilyRestroomIcon />,
+  },
+  {
+    to: '/home/chart',
+    label: '家庭月報',
+    icon: <BarChartIcon />,
   },
   {
     to: '/home/user',

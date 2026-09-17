@@ -9,6 +9,7 @@ import {
   Firestore,
   getDocs,
   updateDoc,
+  writeBatch,
 } from 'firebase/firestore/lite';
 
 import { Record } from '@/views/MainLayout/Home/RecordList';
@@ -85,9 +86,27 @@ export const addHomeRecordApi = async (
 
 export const updateHomeRecordApi = async (
   db: Firestore,
-  data: Record
+  data: Record,
+  originDate: Date | number = data.date
 ): Promise<void> => {
   const { id, ...other } = data;
+  if (monthKey(originDate) !== monthKey(data.date)) {
+    const batch = writeBatch(db);
+    batch.delete(doc(db, 'history', monthKey(originDate), 'record', id));
+    batch.set(doc(db, 'history', monthKey(data.date), 'record', id), other);
+    await batch.commit();
+
+    // 兩個月份的寫入全部成功後才更新快取；失敗時保留原始資料。
+    updateRecordCache(originDate, (list) =>
+      list.filter((item) => item.id !== id)
+    );
+    updateRecordCache(data.date, (list) => [
+      ...list.filter((item) => item.id !== id),
+      data,
+    ]);
+    return;
+  }
+
   await updateDoc(
     doc(db, 'history', monthKey(data.date), 'record', id as string),
     {

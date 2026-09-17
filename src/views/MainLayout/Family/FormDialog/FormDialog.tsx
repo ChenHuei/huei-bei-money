@@ -209,6 +209,7 @@ function FormDialog(props: FormDialogProps) {
           <Controller
             name="huei"
             control={control}
+            rules={{ validate: (value) => Number.isFinite(value) }}
             render={({ field: { value }, fieldState: { error } }) => (
               <FormControl
                 error={!!error}
@@ -241,6 +242,7 @@ function FormDialog(props: FormDialogProps) {
           <Controller
             name="bei"
             control={control}
+            rules={{ validate: (value) => Number.isFinite(value) }}
             render={({ field: { value }, fieldState: { error } }) => (
               <FormControl
                 error={!!error}
@@ -273,6 +275,7 @@ function FormDialog(props: FormDialogProps) {
           <Controller
             name="family"
             control={control}
+            rules={{ validate: (value) => Number.isFinite(value) }}
             render={({ field: { value }, fieldState: { error } }) => (
               <FormControl
                 error={!!error}

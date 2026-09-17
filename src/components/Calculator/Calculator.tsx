@@ -18,12 +18,15 @@ interface CalculatorProps {
 function Calculator(props: CalculatorProps) {
   const { price, onConfirm } = props;
   const [current, setCurrent] = useState(price.toString());
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setCurrent(price.toString());
+    setError('');
   }, [price]);
 
   const handleButtonClick = (type: string) => {
+    setError('');
     const lastLetter = current.slice(-1);
 
     switch (type) {
@@ -31,12 +34,24 @@ function Calculator(props: CalculatorProps) {
         setCurrent('0');
         break;
       case '%':
+      case '=':
+      case 'OK': {
         try {
-          setCurrent(evaluate(`${current}/100`).toString());
+          const result = evaluate(type === '%' ? `${current}/100` : current);
+          if (typeof result !== 'number' || !Number.isFinite(result)) {
+            setError('請輸入有效的金額');
+            break;
+          }
+          if (type === 'OK') {
+            onConfirm(result);
+          } else {
+            setCurrent(result.toString());
+          }
         } catch (e) {
-          setCurrent('NaN');
+          setError('算式有誤，請修正後再試');
         }
         break;
+      }
       case '←':
         setCurrent(current === '0' ? current : current.slice(0, -1) || '0');
         break;
@@ -66,16 +81,6 @@ function Calculator(props: CalculatorProps) {
           setCurrent(current + type);
         }
         break;
-      case '=':
-        try {
-          setCurrent(evaluate(current).toString());
-        } catch (e) {
-          setCurrent('NaN');
-        }
-        break;
-      case 'OK':
-        onConfirm(evaluate(current));
-        break;
       default:
         setCurrent(current === '0' ? type : current + type);
         break;
@@ -87,6 +92,11 @@ function Calculator(props: CalculatorProps) {
       <div className="w-full h-20 flex justify-center items-center mb-4 px-4 font-bold text-2xl text-white bg-primary rounded">
         {current}
       </div>
+      {error && (
+        <p role="alert" className="mb-4 text-white">
+          {error}
+        </p>
+      )}
       <div className="w-full h-full grid grid-cols-4 grid-rows-5 gap-4">
         {BUTTON_LIST.flat().map((btn) => (
           <div
